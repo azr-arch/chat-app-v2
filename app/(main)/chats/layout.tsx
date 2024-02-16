@@ -13,15 +13,6 @@ const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
         redirect("/");
     }
 
-    const availableUsersFn = async () =>
-        await db.user.findMany({
-            where: {
-                NOT: {
-                    email: currUser.email,
-                },
-            },
-        });
-
     const availableChatsFn = async () =>
         await db.chat.findMany({
             where: {
@@ -36,23 +27,17 @@ const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
             },
         });
 
-    const [availableChats, availableUsers] = await Promise.all([
-        availableChatsFn(),
-        availableUsersFn(),
-    ]);
+    const [availableChats] = await Promise.all([availableChatsFn()]);
 
     return (
         <SocketProvider>
             <div
-                style={{ maxHeight: "calc(100vh - 64px)" }}
-                className="w-full h-full self-stretch mx-auto max-w-screen-2xl px-8 py-4 flex gap-x-4 items-stretch relative"
+                // style={{ maxHeight: "calc(100vh - 64px)" }}
+                // className="w-full h-full self-stretch mx-auto max-w-screen-2xl px-8 py-4 flex gap-x-4 items-stretch relative"
+                className="w-full h-full flex relative"
             >
                 <SocketIndicator />
-                <Sidebar
-                    currentUser={currUser}
-                    otherUsers={availableUsers}
-                    chats={availableChats}
-                />
+                <Sidebar currentUser={currUser} chats={availableChats} />
                 {children}
             </div>
         </SocketProvider>

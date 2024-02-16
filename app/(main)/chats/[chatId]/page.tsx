@@ -18,7 +18,7 @@ const ChatIdPage = async ({ params }: { params: { chatId: string } }) => {
     }
 
     return (
-        <div className="w-full min-w-[342px] h-full flex flex-col items-start gap-2 bg-pink-300 ">
+        <div className="w-full min-w-[342px] h-full flex flex-col items-start gap-2 bg-slateGray ">
             <ChatHeader data={currentChat} />
             <ChatMessages initialMessages={messages || []} chatData={currentChat} />
             <MessageForm senderId={currentUser.id} chatId={params.chatId} />

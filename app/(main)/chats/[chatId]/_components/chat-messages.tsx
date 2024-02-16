@@ -84,7 +84,7 @@ export const ChatMessages = ({ initialMessages, chatData }: ChatMessagesProps) =
     return (
         <div
             style={{ maxHeight: "calc(100% - 150px)", scrollbarWidth: "none" }}
-            className="overflow-y-scroll w-full flex-grow flex flex-col gap-2 px-4"
+            className="overflow-y-scroll w-full flex-grow flex flex-col gap-2 px-4 "
         >
             {messages.length > 0 ? (
                 messages.map((message, idx) => (

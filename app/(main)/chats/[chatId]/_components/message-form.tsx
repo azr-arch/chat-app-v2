@@ -69,7 +69,7 @@ export const MessageForm = ({ chatId, senderId }: { chatId: string; senderId: st
     };
 
     return (
-        <div className="bg-orange-400 w-full h-[72px] flex items-center p-2 gap-2">
+        <div className="bg-beige w-full h-[62px] self-end flex items-center px-4 py-2 gap-2">
             <form onSubmit={handleSubmit} className="flex items-stretch w-full h-full gap-2">
                 <Input
                     {...register("message")}

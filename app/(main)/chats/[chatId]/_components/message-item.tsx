@@ -26,17 +26,18 @@ export const MessageItem = ({ data, otherUser, isLast }: MessageItemProps) => {
                 isReceiver ? "self-start items-start " : "self-end items-end"
             )}
         >
-            <span
+            <p
                 className={cn(
-                    `p-2 rounded-md`,
-                    isReceiver ? "text-white bg-black" : "text-black bg-white"
+                    `p-2 rounded-md text-sm`,
+                    isReceiver ? "text-black bg-beige" : "text-white bg-darkGray"
                 )}
+                data-receiver={isReceiver ? "other" : "me"}
             >
                 {data.content}
-            </span>
+            </p>
 
             <div className="flex items-center space-x-2 mt-[1px] text-[10px]">
-                <time className="text-neutral-600 font-semibold">
+                <time className="text-neutral-800 font-semibold">
                     {format(new Date(data.createdAt), "p")}
                 </time>
                 {isLast && !isReceiver && seenAgo && (

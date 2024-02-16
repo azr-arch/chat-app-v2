@@ -22,31 +22,30 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
 
     const onClick = useCallback(async () => {
         try {
-            const data = await axios.post(`/api/chat/${chatId}`, {
-                userId: user?.id,
-                chatId: chat?.id,
-            });
+            const data = await axios.get(`/api/chat/${chat.id}`);
 
             router.push(`/chats/${data.data.id}`);
         } catch (error) {
             console.log(error);
         }
-    }, [user?.id, chat?.id, router]);
+    }, [chat.id, router]);
+
+    // Creating new chat route functionality is missing
 
     return (
         <li
-            key={user?.id}
-            className="px-4 md:px-6 py-2 bg-pink-300 cursor-pointer hover:bg-opacity-50 transition relative"
+            key={otherUser?.id}
+            className="px-4 md:px-6 h-20  bg-transparent border-b cursor-pointer hover:bg-beige duration-150 transition-colors relative flex items-center "
             onClick={onClick}
         >
             <div className="flex items-center gap-3">
-                <Avatar user={user} />
+                <Avatar size="lg" user={otherUser} />
 
                 <div className="hidden md:flex flex-col items-start ">
-                    <p className="text-black">{user?.name}</p>
-                    <p className="text-neutral-700 text-sm">previous message text</p>
+                    <p className="text-black font-medium">{otherUser?.name}</p>
+                    <p className="text-neutral-800 text-sm">previous message text</p>
                     {chat && (
-                        <time className="text-neutral-600 font-semibold absolute right-4 top-2 text-[10px]">
+                        <time className="text-neutral-800 font-semibold absolute right-4 top-2 text-[10px]">
                             {format(new Date(chat.createdAt), "p")}
                         </time>
                     )}

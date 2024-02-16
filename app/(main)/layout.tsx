@@ -2,8 +2,8 @@ import { Header } from "./components/header";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div className="w-full h-screen flex flex-col">
-            <Header />
+        <div className="w-full h-full flex flex-col max-w-screen-2xl m-auto 2xl:py-3">
+            {/* <Header /> */}
             {children}
         </div>
     );

@@ -5,6 +5,8 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { AuthContext } from "@/context/auth-context";
 
+import TopLoader from "nextjs-toploader";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
             <body className={inter.className}>
+                <TopLoader color="#000" height={10} />
                 <AuthContext>
                     <Toaster />
                     {children}

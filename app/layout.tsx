@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
             <body className={inter.className}>
-                <TopLoader color="#000" height={10} />
+                <TopLoader color="#000" showSpinner={false} />
                 <AuthContext>
                     <Toaster />
                     {children}

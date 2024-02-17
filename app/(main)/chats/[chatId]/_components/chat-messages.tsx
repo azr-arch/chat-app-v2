@@ -40,13 +40,7 @@ export const ChatMessages = ({ initialMessages, chatData }: ChatMessagesProps) =
                 }
                 return [...prev, newMessage];
             });
-
-            // Scroll to the bottom using the callback ref
-            setTimeout(() => {
-                bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-            }, 0);
         };
-        pusherClient.bind("messages:new", newMessageHandler);
 
         const updateMessageHandler = (newMessage: FullMessageType) => {
             setMessages((prev) =>
@@ -59,6 +53,8 @@ export const ChatMessages = ({ initialMessages, chatData }: ChatMessagesProps) =
                 })
             );
         };
+
+        pusherClient.bind("messages:new", newMessageHandler);
         pusherClient.bind("message:update", updateMessageHandler);
 
         return () => {
@@ -84,7 +80,7 @@ export const ChatMessages = ({ initialMessages, chatData }: ChatMessagesProps) =
     return (
         <div
             style={{ maxHeight: "calc(100% - 150px)", scrollbarWidth: "none" }}
-            className="overflow-y-scroll w-full flex-grow flex flex-col gap-2 px-4 "
+            className="overflow-y-scroll w-full flex-grow flex flex-col  gap-2 px-4 "
         >
             {messages.length > 0 ? (
                 messages.map((message, idx) => (
@@ -98,9 +94,7 @@ export const ChatMessages = ({ initialMessages, chatData }: ChatMessagesProps) =
                     />
                 ))
             ) : (
-                <p className="text-sm font-medium absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    Send a message to start the conversation
-                </p>
+                <p className="text-sm font-medium ">Send a message to start the conversation</p>
             )}
 
             <div ref={bottomRef} />

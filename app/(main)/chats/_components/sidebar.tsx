@@ -4,8 +4,10 @@ import { Chat, User } from "@prisma/client";
 import { SidebarOpen } from "lucide-react";
 import { SidebarHeader } from "./sidebar-header";
 import { SidebarList } from "./sidebar-list";
-import { FullChatType } from "@/lib/types";
+import { FullChatType, FullMessageType } from "@/lib/types";
 import { SidebarSearch } from "./sidebar-search";
+import { useEffect, useState } from "react";
+import { pusherClient } from "@/lib/pusher";
 
 interface SidebarProps {
     currentUser: User;
@@ -13,6 +15,31 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
+    const [initialChats, setInitialChats] = useState<FullChatType[]>(chats);
+
+    useEffect(() => {
+        if (!currentUser.email) return;
+        pusherClient.subscribe(currentUser.email);
+
+        const updateChatHandler = ({ id, message }: { id: string; message: FullMessageType }) => {
+            // Update the chats with corresponding id, to show new last message
+            // Chat schema should be changed to using last Message field
+            setInitialChats((prev) =>
+                prev.map((chat) => {
+                    if (chat.id !== id) return chat;
+
+                    return { ...chat, messages: [...chat.messages, message] };
+                })
+            );
+        };
+
+        pusherClient.bind("chat:update", updateChatHandler);
+
+        return () => {
+            pusherClient.unbind("chat:update", updateChatHandler);
+        };
+    }, [currentUser.email]);
+
     return (
         <aside className="max-w-[480px] border-r border-lightGray md:min-w-[350px] md:w-full w-[80px] h-full bg-slateGray relative">
             <SidebarHeader data={currentUser} />

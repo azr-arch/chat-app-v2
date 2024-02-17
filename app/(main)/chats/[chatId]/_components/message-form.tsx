@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Upload } from "@/components/upload";
 import { useSocket } from "@/context/socket";
 import { useSocketHandler } from "@/hooks/use-socket-handler";
 import axios from "axios";
@@ -53,13 +54,11 @@ export const MessageForm = ({ chatId, senderId }: { chatId: string; senderId: st
         // TODO
         setIsLoading(true);
         try {
-            const resp = await sendMessage({
+            await sendMessage({
                 chatId,
                 senderId,
                 content: message || " ",
             });
-
-            console.log({ resp });
         } catch (error) {
             // Fallback method for sending message, in case socket isnt available
             handleSubmitForm(onSubmit);
@@ -69,24 +68,25 @@ export const MessageForm = ({ chatId, senderId }: { chatId: string; senderId: st
     };
 
     return (
-        <div className="bg-beige w-full h-[62px] self-end flex items-center px-4 py-2 gap-2">
+        <div className="bg-beige w-full h-[62px] self-end flex items-center px-4 py-2 gap-2 mt-auto">
+            <Upload chatId={chatId} />
             <form onSubmit={handleSubmit} className="flex items-stretch w-full h-full gap-2">
                 <Input
                     {...register("message")}
                     placeholder="Message..."
                     type="text"
                     autoComplete={"none"}
-                    className="h-full"
+                    className="h-full bg-darkGray/20 text-black  focus-visible:ring-0 focus-visible:ring-offset-1 focus-visible:ring-lightGray border-darkGray rounded-sm"
                     disabled={isLoading}
                     ref={messageRef}
                 />
                 <Button
                     disabled={isLoading}
-                    className="h-full text-black"
-                    variant={"outline"}
+                    className="h-auto w-fit text-black hover:bg-transparent px-1"
+                    variant={"submit"}
                     size={"sm"}
                 >
-                    <Send className="w-5 h-5" />
+                    <Send className="w-4 h-4 " />
                 </Button>
             </form>
         </div>

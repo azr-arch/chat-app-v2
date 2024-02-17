@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { ChatHeader } from "./_components/chat-header";
 import { ChatMessages } from "./_components/chat-messages";
 import { MessageForm } from "./_components/message-form";
-import { getChatById } from "@/actions/get-chat-by-id";
+import { getChatById } from "@/actions/get-chat/get-chat-by-id";
 import { getMessages } from "@/actions/get-messages";
 import { getCurrentUser } from "@/actions/get-current-user";
 

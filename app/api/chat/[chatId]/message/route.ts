@@ -11,9 +11,9 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
             return new NextResponse("Unauthorized", { status: 400 });
         }
 
-        const { message } = await req.json();
+        const { message, image } = await req.json();
 
-        if (!message) {
+        if (!message && !image) {
             return new NextResponse("Invalid fields", { status: 400 });
         }
 
@@ -31,6 +31,7 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
             },
             data: {
                 content: message,
+                image,
                 chat: {
                     connect: { id: params.chatId },
                 },

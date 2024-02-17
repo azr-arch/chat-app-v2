@@ -54,9 +54,11 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
             },
         });
 
-        await pusherServer.trigger(currentUser.email, "chat:update", {
-            id: params.chatId,
-            messages: [updatedMessage],
+        chat.participants.map((participant) => {
+            pusherServer.trigger(participant.email!, "chat:update", {
+                id: params.chatId,
+                messages: [updatedMessage],
+            });
         });
 
         if (lastMessage.seenIds.indexOf(currentUser.id) !== -1) {

@@ -10,6 +10,8 @@ import { revalidatePath } from "next/cache";
 type InputType = z.infer<typeof SendMessage>;
 type ReturnType = any;
 
+// Todo use this instead of api calls
+
 const handler = async (data: InputType): Promise<ReturnType> => {
     const { chatId, message } = data;
     let newMessage;

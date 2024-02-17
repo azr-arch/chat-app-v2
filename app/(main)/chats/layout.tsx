@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/actions/get-current-user";
 import { SocketProvider } from "@/context/socket";
 import { SocketIndicator } from "@/components/socket-indicator";
+import { getChats } from "@/actions/get-chat/get-chats";
 
 const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
     const currUser = await getCurrentUser();
@@ -13,21 +14,7 @@ const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
         redirect("/");
     }
 
-    const availableChatsFn = async () =>
-        await db.chat.findMany({
-            where: {
-                participants: {
-                    some: {
-                        email: currUser.email,
-                    },
-                },
-            },
-            include: {
-                participants: true,
-            },
-        });
-
-    const [availableChats] = await Promise.all([availableChatsFn()]);
+    const availableChats = await getChats();
 
     return (
         <SocketProvider>

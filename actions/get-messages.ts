@@ -7,8 +7,20 @@ export const getMessages = async (chatId: string) => {
                 chatId,
             },
             include: {
-                sender: true,
-                seen: true,
+                sender: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        image: true,
+                    },
+                },
+                seen: {
+                    select: {
+                        id: true,
+                        email: true,
+                    },
+                },
             },
             orderBy: {
                 createdAt: "asc",

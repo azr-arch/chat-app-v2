@@ -16,7 +16,7 @@ interface ChatMessagesProps {
 }
 
 export const ChatMessages = ({ initialMessages, chatData }: ChatMessagesProps) => {
-    const [messages, setMessages] = useState(initialMessages);
+    const [messages, setMessages] = useState(chatData.messages);
     const bottomRef = useRef<HTMLDivElement>(null);
 
     const otherUser = useOtherUser(chatData);

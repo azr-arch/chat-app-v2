@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/avatar";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { format, formatDistanceToNow } from "date-fns";
 import { useCallback, useMemo } from "react";
 import { FullChatType } from "@/lib/types";
@@ -19,6 +19,7 @@ interface ChatItemProps {
 
 export const ChatItem = ({ chat }: ChatItemProps) => {
     const router = useRouter();
+    const params = useParams();
     const otherUser = useOtherUser(chat);
     const session = useSession();
 
@@ -45,6 +46,12 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
         if (lastMessage.content) return lastMessage.content;
     }, [lastMessage]);
 
+    const isActiveChat = useMemo(() => {
+        if (!params || !params.chatId) return false;
+
+        return params.chatId === chat.id;
+    }, [chat.id, params]);
+
     // Todo can be used for new chats
     // Creating new chat route functionality is missing
     const onClick = useCallback(async () => {
@@ -60,7 +67,10 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
     return (
         <li
             key={otherUser?.id}
-            className="px-4 md:px-6 h-20  bg-transparent border-b cursor-pointer hover:bg-beige/50 duration-150 transition-colors relative flex items-center "
+            className={cn(
+                "px-4 md:px-6 h-20  bg-transparent border-b cursor-pointer duration-150 transition-colors relative flex items-center",
+                isActiveChat ? "bg-beige/50" : "hover:bg-beige/50"
+            )}
         >
             <Link href={`/chats/${chat.id}`} className="w-full">
                 <div className="flex items-center gap-3 ">
@@ -71,7 +81,9 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
                         <p
                             className={cn(
                                 "text-xs text-gray-100",
-                                isSeen ? "font-normal" : "  font-medium"
+                                isSeen || lastMessageText === "Started a chat"
+                                    ? "font-normal"
+                                    : "  font-medium"
                             )}
                         >
                             {lastMessageText}

@@ -1,13 +1,17 @@
 "use client";
 
-import { Chat, User } from "@prisma/client";
-import { SidebarOpen } from "lucide-react";
+import { User } from "@prisma/client";
 import { SidebarHeader } from "./sidebar-header";
 import { SidebarList } from "./sidebar-list";
 import { FullChatType, FullMessageType } from "@/lib/types";
 import { SidebarSearch } from "./sidebar-search";
 import { useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
+import { find } from "lodash";
+
+import { useProfileSidebar } from "@/hooks/use-profile-sidebar";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { ProfileSidebar } from "./profile-sidebar";
 
 interface SidebarProps {
     currentUser: User;
@@ -16,19 +20,22 @@ interface SidebarProps {
 
 export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
     const [initialChats, setInitialChats] = useState<FullChatType[]>(chats);
+    const { isOpen, onClose } = useProfileSidebar();
 
     useEffect(() => {
         if (!currentUser.email) return;
         pusherClient.subscribe(currentUser.email);
 
-        const updateChatHandler = ({ id, message }: { id: string; message: FullMessageType }) => {
-            // Update the chats with corresponding id, to show new last message
-            // Chat schema should be changed to using last Message field
+        const updateChatHandler = (data: { id: string; message: FullMessageType }) => {
+            if (!data.message) return;
             setInitialChats((prev) =>
                 prev.map((chat) => {
-                    if (chat.id !== id) return chat;
-
-                    return { ...chat, messages: [...chat.messages, message] };
+                    if (chat.id === data.id) {
+                        if (!find(chat.messages, { id: data.message.id })) {
+                            return { ...chat, messages: [...chat.messages, data.message] };
+                        }
+                    }
+                    return chat;
                 })
             );
         };
@@ -49,10 +56,18 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
             </div> */}
 
             {/* <DesktopSidebar /> */}
-            <SidebarList chats={chats} />
+            <SidebarList chats={initialChats} />
 
             {/* <p className="my-2 text-lg font-medium">Chats</p> */}
             {/* <ChatList data={chats} /> */}
+
+            {/* Profile Nav */}
+
+            <Sheet open={isOpen} onOpenChange={onClose}>
+                <SheetContent side="left" className="p-2 pt-10 max-w-[480px] min-w-[350px] w-full">
+                    <ProfileSidebar data={currentUser} />
+                </SheetContent>
+            </Sheet>
         </aside>
     );
 };

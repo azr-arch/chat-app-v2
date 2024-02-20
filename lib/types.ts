@@ -7,7 +7,7 @@ export type FullMessageType = Message & {
         email: string | null;
         image: string | null;
     };
-    seen: { id: string; email: string }[];
+    seen: { id: string; email: string | null }[];
 };
 
 export type FullChatType = Chat & {

@@ -30,8 +30,6 @@ export const getChatById = async (chatId: string) => {
             },
         });
 
-        console.log({ chat });
-
         if (!chat) {
             return null;
         }

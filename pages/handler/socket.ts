@@ -65,7 +65,7 @@ export const handleSendMessage = (socket: Socket) => {
                 updatedChat.participants.map((user) => {
                     pusherServer.trigger(user.email!, "chat:update", {
                         id: chatId,
-                        message: [lastMessage],
+                        message: lastMessage,
                     });
                 });
 

@@ -77,19 +77,19 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
                     <Avatar size="lg" user={otherUser} />
 
                     <div className="hidden md:flex flex-col items-start ">
-                        <p className="text-lightGray font-medium">{otherUser?.name}</p>
+                        <p className="text-lightGray font-normal">{otherUser?.name}</p>
                         <p
                             className={cn(
                                 "text-xs text-gray-100",
                                 isSeen || lastMessageText === "Started a chat"
                                     ? "font-normal"
-                                    : "  font-medium"
+                                    : "font-medium"
                             )}
                         >
                             {lastMessageText}
                         </p>
                         {chat && (
-                            <time className="text-neutral-800 font-semibold absolute right-4 top-2 text-[10px]">
+                            <time className="text-neutral-800 font-bold absolute right-4 top-2 text-[10px]">
                                 {formatMessageTime(lastMessage?.updatedAt || chat.createdAt)}
                             </time>
                         )}

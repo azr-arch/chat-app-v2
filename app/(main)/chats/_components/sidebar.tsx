@@ -48,7 +48,7 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
     }, [currentUser.email]);
 
     return (
-        <aside className="max-w-[480px] border-r border-lightGray md:min-w-[350px] md:w-full w-[80px] h-full bg-slateGray relative">
+        <aside className="max-w-[480px] border-r  border-lightGray md:min-w-[350px] md:w-full w-[80px] h-full bg-slateGray relative">
             <SidebarHeader data={currentUser} />
             <SidebarSearch />
             {/* <div className="block md:hidden absolute top-2 right-2">
@@ -64,7 +64,7 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
             {/* Profile Nav */}
 
             <Sheet open={isOpen} onOpenChange={onClose}>
-                <SheetContent side="left" className="p-2 pt-10 max-w-[480px] min-w-[350px] w-full">
+                <SheetContent side="left" className="p-2 pt-10  w-full absolute top-0 left-0">
                     <ProfileSidebar data={currentUser} />
                 </SheetContent>
             </Sheet>

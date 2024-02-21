@@ -30,7 +30,7 @@ export const MessageItem = ({ data, otherUser, isLast }: MessageItemProps) => {
             {data.content && (
                 <p
                     className={cn(
-                        `p-2 rounded-md text-sm`,
+                        `p-2 rounded-md text-sm font-medium`,
                         isReceiver ? "text-black bg-beige" : "text-white bg-darkGray"
                     )}
                     data-receiver={isReceiver ? "other" : "me"}

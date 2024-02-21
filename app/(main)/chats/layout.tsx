@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/actions/get-current-user";
 import { SocketProvider } from "@/context/socket";
 import { SocketIndicator } from "@/components/socket-indicator";
 import { getChats } from "@/actions/get-chat/get-chats";
+import { AddUserModal } from "@/components/modals/add-user.modal";
 
 const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
     const currUser = await getCurrentUser();
@@ -18,11 +19,8 @@ const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
 
     return (
         <SocketProvider>
-            <div
-                // style={{ maxHeight: "calc(100vh - 64px)" }}
-                // className="w-full h-full self-stretch mx-auto max-w-screen-2xl px-8 py-4 flex gap-x-4 items-stretch relative"
-                className="w-full h-full flex relative"
-            >
+            <div className="w-full h-full flex relative">
+                <AddUserModal />
                 <SocketIndicator />
                 <Sidebar currentUser={currUser} chats={availableChats} />
                 {children}

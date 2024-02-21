@@ -11,11 +11,10 @@ import { find } from "lodash";
 import axios from "axios";
 
 interface ChatMessagesProps {
-    initialMessages: FullMessageType[];
     chatData: FullChatType;
 }
 
-export const ChatMessages = ({ initialMessages, chatData }: ChatMessagesProps) => {
+export const ChatMessages = ({ chatData }: ChatMessagesProps) => {
     const [messages, setMessages] = useState(chatData.messages);
     const bottomRef = useRef<HTMLDivElement>(null);
 

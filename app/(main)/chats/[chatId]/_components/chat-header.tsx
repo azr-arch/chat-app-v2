@@ -17,7 +17,7 @@ export const ChatHeader = ({ data }: ChatHeaderProps) => {
                 <Avatar user={receiver} size="md" />
 
                 <div className="flex flex-col items-start ">
-                    <p className="text-black font-bold">{receiver.name}</p>
+                    <p className="text-black font-medium">{receiver.name}</p>
                     {/* <p className="text-xs text-neutral-700">active 3min ago.</p> */}
                 </div>
             </div>

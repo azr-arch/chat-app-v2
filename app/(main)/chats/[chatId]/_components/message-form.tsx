@@ -29,11 +29,9 @@ export const MessageForm = ({ chatId, senderId }: { chatId: string; senderId: st
             const message = data.message;
 
             try {
-                const res = await axios.post(`/api/chat/${chatId}/message`, {
+                await axios.post(`/api/chat/${chatId}/message`, {
                     message,
                 });
-
-                console.log(res.data);
             } catch (error) {
                 console.log(error);
             }
@@ -60,10 +58,13 @@ export const MessageForm = ({ chatId, senderId }: { chatId: string; senderId: st
                 content: message || " ",
             });
         } catch (error) {
+            console.log({ error });
             // Fallback method for sending message, in case socket isnt available
-            handleSubmitForm(onSubmit);
+            // handleSubmitForm(onSubmit);
+            await onSubmit({ message: messageRef.current.value });
         } finally {
             setIsLoading(false);
+            reset();
         }
     };
 

@@ -26,6 +26,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
         socket = io();
         if (socket) {
             setIsConnected(true);
+
+            // Todo: Register user as online with email id obtained from localstorage
+            // This will help in implementing online status feature
         }
     };
 

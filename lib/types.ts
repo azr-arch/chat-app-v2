@@ -19,5 +19,5 @@ export interface MessagePayload {
     chatId: string;
     content: string;
     senderId: string;
-    // replyTo: string;
+    // status: "SENT" | "PENDING";
 }

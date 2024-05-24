@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 
 import { FormInput } from "@/components/form/form-input";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import axios from "axios";
@@ -12,6 +11,7 @@ import { toast } from "sonner";
 import { signIn, useSession } from "next-auth/react";
 
 import { useRouter } from "next/navigation";
+import { getCurrentUser } from "@/actions/get-current-user";
 
 type FormVariant = "LOGIN" | "REGISTER";
 

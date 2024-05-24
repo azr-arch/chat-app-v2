@@ -4,7 +4,7 @@ import Image from "next/image";
 
 interface AvatarProps {
     user?: User;
-    size: "sm" | "md" | "lg";
+    size: "xs" | "sm" | "md" | "lg";
 }
 
 export const Avatar = ({ user, size }: AvatarProps) => {
@@ -13,7 +13,13 @@ export const Avatar = ({ user, size }: AvatarProps) => {
             <div
                 className={cn(
                     `relative rounded-full overflow-hidden`,
-                    size === "sm" ? "w-9 h-9" : size === "md" ? "w-10 h-10" : "w-11 h-11"
+                    size === "xs"
+                        ? "w-7 h-7"
+                        : size === "sm"
+                        ? "w-9 h-9"
+                        : size === "md"
+                        ? "w-10 h-10"
+                        : "w-11 h-11"
                 )}
             >
                 <Image

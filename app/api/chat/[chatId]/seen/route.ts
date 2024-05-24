@@ -2,8 +2,6 @@ import { getCurrentUser } from "@/actions/get-current-user";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/prisma-db";
 import { pusherServer } from "@/lib/pusher";
-import { last } from "lodash";
-import { send } from "process";
 
 export async function POST(req: NextRequest, { params }: { params: { chatId: string } }) {
     try {
@@ -54,10 +52,26 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
             },
         });
 
+        // MIGHT USE THIS LATER
+        // Removing unread count
+        // if (updatedMessage.seenIds.length >= 2) {
+        //     console.log("Resetting unreadCount");
+        //     await db.chat.update({
+        //         where: {
+        //             id: chat.id,
+        //         },
+        //         data: {
+        //             unreadCount: 0,
+        //         },
+        //     });
+        // }
+
         chat.participants.map((participant) => {
+            console.log("seenIDs: ", updatedMessage.seenIds);
             pusherServer.trigger(participant.email!, "chat:update", {
                 id: params.chatId,
                 messages: [updatedMessage],
+                // chatUnreadCount: updatedMessage.seenIds.length < 2 ? chat.unreadCount : 0,
             });
         });
 

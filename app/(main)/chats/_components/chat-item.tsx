@@ -34,7 +34,7 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
         if (!lastMessage) return false;
 
         const seenArr = lastMessage.seen || [];
-        if (!currentUserEmail) return false;
+        `if (!currentUserEmail) return false;`;
 
         return seenArr.filter((item) => item.email === currentUserEmail).length !== 0;
     }, [currentUserEmail, lastMessage]);
@@ -68,32 +68,37 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
         <li
             key={otherUser?.id}
             className={cn(
-                "px-4 md:px-6 h-20  bg-transparent border-b cursor-pointer duration-150 transition-colors relative flex items-center",
-                isActiveChat ? "bg-beige/50" : "hover:bg-beige/50"
+                "px-4 md:px-6 h-20  bg-transparent  cursor-pointer duration-150 transition-colors relative flex items-center",
+                isActiveChat ? "bg-[#1f2022]" : "hover:bg-[#1f2022]"
             )}
         >
             <Link href={`/chats/${chat.id}`} className="w-full">
-                <div className="flex items-center gap-3 ">
-                    <Avatar size="lg" user={otherUser} />
+                <div className="flex items-center gap-6 ">
+                    <Avatar size="md" user={otherUser} />
 
-                    <div className="hidden md:flex flex-col items-start ">
+                    <div className="hidden md:flex flex-col items-start justify-center gap-1 ">
                         <p className="text-lightGray ">{otherUser?.name}</p>
                         <p
                             className={cn(
                                 "text-xs ",
                                 isSeen || lastMessageText === "Started a chat"
-                                    ? "font-normal text-black/70"
-                                    : "font-medium text-black/80"
+                                    ? " text-[#656668]"
+                                    : " text-[#d2d3d3]"
                             )}
                         >
                             {lastMessageText}
                         </p>
+
                         {chat && (
-                            <time className="text-neutral-800 font-bold absolute right-4 top-2 text-[10px]">
+                            <time className="text-[#656668] font-bold absolute right-6 top-1/2 -translate-y-1/2 text-[10px]">
                                 {formatMessageTime(lastMessage?.updatedAt || chat.createdAt)}
                             </time>
                         )}
                     </div>
+
+                    {!isSeen ? (
+                        <span className="rounded-full p-1 absolute right-20 top-1/2 -translate-y-1/2  flex items-center justify-center text-[10px] 2xl:text-xs font-medium bg-[#fb734b] text-white"></span>
+                    ) : null}
                 </div>
             </Link>
         </li>

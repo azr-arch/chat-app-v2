@@ -2,7 +2,7 @@
 
 import { CldUploadWidget, CldUploadWidgetResults } from "next-cloudinary";
 import { Button } from "./ui/button";
-import { PlusCircle } from "lucide-react";
+import { Paperclip } from "lucide-react";
 import axios from "axios";
 
 export const Upload = ({ chatId }: { chatId: string }) => {
@@ -33,8 +33,13 @@ export const Upload = ({ chatId }: { chatId: string }) => {
                     };
 
                     return (
-                        <Button size={"sm"} variant={"outline"} onClick={onClick}>
-                            <PlusCircle className="w-4 h-4" />
+                        <Button
+                            size={"sm"}
+                            variant={"transparent"}
+                            onClick={onClick}
+                            className="text-placeholder"
+                        >
+                            <Paperclip className="w-4 h-4 text-inherit " />
                         </Button>
                     );
                 }}

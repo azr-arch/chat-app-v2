@@ -1,5 +1,3 @@
-import { db } from "@/lib/prisma-db";
-import { Logout } from "@/components/logout";
 import { Sidebar } from "./_components/sidebar";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/actions/get-current-user";
@@ -12,7 +10,8 @@ const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
     const currUser = await getCurrentUser();
 
     if (!currUser) {
-        redirect("/");
+        return redirect("/");
+        return;
     }
 
     const availableChats = await getChats();

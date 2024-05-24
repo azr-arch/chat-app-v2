@@ -1,9 +1,10 @@
-import { SEND_MESSAGE } from "@/lib/constants";
+import { SEND_MESSAGE, TYPING_STATUS } from "@/lib/constants";
 import { db } from "@/lib/prisma-db";
 import { pusherServer } from "@/lib/pusher";
-import { MessagePayload } from "@/lib/types";
+import { MessagePayload, TypingStatusPayload } from "@/lib/types";
 import { Socket } from "socket.io";
 
+// For sending messages
 export const handleSendMessage = (socket: Socket) => {
     socket.on(
         SEND_MESSAGE,
@@ -49,6 +50,9 @@ export const handleSendMessage = (socket: Socket) => {
                                 id: newMessage.id,
                             },
                         },
+                        // unreadCount: {
+                        //     increment: 1,
+                        // },
                     },
                     include: {
                         participants: true,
@@ -65,14 +69,26 @@ export const handleSendMessage = (socket: Socket) => {
                 updatedChat.participants.map((user) => {
                     pusherServer.trigger(user.email!, "chat:update", {
                         id: chatId,
+                        // chatUnreadCount: chat?.unreadCount ? chat.unreadCount : 0,
                         message: lastMessage,
                     });
                 });
 
                 returnMessageToSender(newMessage);
             } catch (error) {
-                console.log("error: ", error);
+                console.log("error while sending message: ", error);
             }
         }
     );
+};
+
+// For handling typing status updates
+export const handleTypingStatus = (socket: Socket) => {
+    socket.on(TYPING_STATUS, async ({ chatId, isTyping, senderId }: TypingStatusPayload) => {
+        try {
+            await pusherServer.trigger(chatId, "typing::status", { isTyping, senderId });
+        } catch (error) {
+            console.log("error while sending typing updates: ", error);
+        }
+    });
 };

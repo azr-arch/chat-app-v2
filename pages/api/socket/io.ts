@@ -1,6 +1,6 @@
 // /api/socket/io.ts
 
-import { handleSendMessage } from "@/pages/handler/socket";
+import { handleSendMessage, handleTypingStatus } from "@/pages/handler/socket";
 import type { Server as HTTPServer } from "http";
 import type { Socket as NetSocket } from "net";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -32,6 +32,9 @@ export default function SocketHandler(req: NextApiRequest, res: NextApiResponseW
     io.on("connection", (socket) => {
         // SEND_MESSAGE
         handleSendMessage(socket);
+
+        // TYPING_STATUS
+        handleTypingStatus(socket);
     });
 
     console.log("Setting up socket");

@@ -15,9 +15,13 @@ export const SidebarHeader = ({ data }: SidebarHeaderProps) => {
     const { onOpen: openAddFriend } = useAddFriendModal();
 
     return (
-        <div className="w-full bg-beige px-6 h-16 flex items-center">
+        <div className="w-full bg-transparent px-6 h-16 flex items-center">
             {/* Profile */}
-            <div role="button" onClick={onOpen} className="w-10 h-10 rounded-full bg-black mr-4" />
+            <div
+                role="button"
+                onClick={onOpen}
+                className="w-10 h-10 rounded-full bg-black mr-4 outline outline-light-black"
+            />
 
             {/* Todo add options */}
 

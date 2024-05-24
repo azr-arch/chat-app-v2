@@ -1,7 +1,7 @@
 const ChatsPage = () => {
     return (
-        <div className="w-full h-full bg-beige flex items-center justify-center">
-            This is default page!
+        <div className="w-full h-full bg-main  flex items-center justify-center">
+            <p className="text-accent-2">This is default page!</p>
         </div>
     );
 };

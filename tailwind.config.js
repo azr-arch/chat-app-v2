@@ -53,11 +53,16 @@ module.exports = {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
-                lightGray: "#FBFBFB",
+                lightGray: "#e2e2e2",
                 slateGray: "#716969",
                 darkGray: "#2D2E2E",
                 black: "#0F0F0F",
                 beige: "#BCABAE",
+
+                main: "#131416",
+                "light-blue": "#43a0ff",
+                "light-black": "#28292d",
+                "light-black-2": "#1c1d1f",
             },
             borderRadius: {
                 lg: "var(--radius)",
@@ -77,6 +82,11 @@ module.exports = {
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
+            },
+            textColor: {
+                "accent-2": "#ababab",
+                "accent-3": "#767779",
+                placeholder: "#717274",
             },
         },
     },

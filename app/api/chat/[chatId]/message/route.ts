@@ -17,13 +17,6 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
             return new NextResponse("Invalid fields", { status: 400 });
         }
 
-        const chat = await db.chat.findUnique({
-            where: {
-                id: params.chatId,
-            },
-            include: {},
-        });
-
         const newMessage = await db.message.create({
             include: {
                 seen: true,
@@ -57,6 +50,9 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
                         id: newMessage.id,
                     },
                 },
+                // unreadCount: {
+                //     increment: 1,
+                // },
             },
             include: {
                 participants: true,
@@ -73,7 +69,6 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
         const lastMessage = updatedChat.messages[updatedChat.messages.length - 1];
 
         updatedChat.participants.map((user) => {
-            console.log("From /app/api");
             pusherServer.trigger(user.email!, "chat:update", {
                 id: params.chatId,
                 message: lastMessage,

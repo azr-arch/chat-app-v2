@@ -10,14 +10,13 @@ interface ChatHeaderProps {
 
 export const ChatHeader = ({ data }: ChatHeaderProps) => {
     const receiver = useOtherUser(data);
-
     return (
-        <div className="px-6 w-full h-16 flex items-center bg-beige relative">
-            <div className="flex items-center gap-3">
-                <Avatar user={receiver} size="md" />
+        <div className="px-6 w-full h-16 flex items-center relative chat-header-effect">
+            <div className="flex items-center gap-5">
+                <Avatar user={receiver} size="xs" />
 
                 <div className="flex flex-col items-start ">
-                    <p className="text-black font-medium">{receiver.name}</p>
+                    <p className="text-lightGray font-medium ">{receiver.name}</p>
                     {/* <p className="text-xs text-neutral-700">active 3min ago.</p> */}
                 </div>
             </div>

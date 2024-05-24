@@ -11,13 +11,13 @@ const ChatIdPage = async ({ params }: { params: { chatId: string } }) => {
     ]);
 
     if (!currentChat || !currentUser?.id) {
-        return <div>No Chat</div>;
+        return <div className="text-accent-2">No Chat</div>;
     }
 
     return (
-        <div className="w-full min-w-[342px] h-full flex flex-col items-start gap-2 bg-slateGray ">
+        <div className="w-full min-w-[342px] h-full flex flex-col items-start gap-2 bg-main ">
             <ChatHeader data={currentChat} />
-            <ChatMessages chatData={currentChat} />
+            <ChatMessages chatData={currentChat} currentUserId={currentUser.id} />
             <MessageForm senderId={currentUser.id} chatId={params.chatId} />
         </div>
     );

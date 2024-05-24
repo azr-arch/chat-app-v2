@@ -21,3 +21,9 @@ export interface MessagePayload {
     senderId: string;
     // status: "SENT" | "PENDING";
 }
+
+export interface TypingStatusPayload {
+    chatId: string;
+    senderId: string;
+    isTyping: boolean;
+}

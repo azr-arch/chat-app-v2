@@ -14,7 +14,7 @@ export const SidebarList = ({ chats }: SidebarListProps) => {
             </ul>
 
             {chats.length <= 0 && (
-                <p className="text-center mt-8">No chats found add some from top </p>
+                <p className="text-center mt-8 text-accent-2">No chats found add some from top </p>
             )}
         </>
     );

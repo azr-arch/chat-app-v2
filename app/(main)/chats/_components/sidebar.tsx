@@ -26,16 +26,26 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
         if (!currentUser.email) return;
         pusherClient.subscribe(currentUser.email);
 
-        const updateChatHandler = (data: { id: string; message: FullMessageType }) => {
+        const updateChatHandler = (data: {
+            id: string;
+            message: FullMessageType;
+            chat: FullChatType;
+            // chatUnreadCount: number;
+        }) => {
             if (!data.message) return;
             setInitialChats((prev) =>
-                prev.map((chat) => {
-                    if (chat.id === data.id) {
-                        if (!find(chat.messages, { id: data.message.id })) {
-                            return { ...chat, messages: [...chat.messages, data.message] };
+                prev.map((prevChat) => {
+                    if (prevChat.id === data.id) {
+                        console.log(data);
+                        if (!find(prevChat.messages, { id: data.message.id })) {
+                            return {
+                                ...prevChat,
+                                messages: [...prevChat.messages, data.message],
+                                // unreadCount: data.chatUnreadCount,
+                            };
                         }
                     }
-                    return chat;
+                    return prevChat;
                 })
             );
         };
@@ -48,7 +58,7 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
     }, [currentUser.email]);
 
     return (
-        <aside className="max-w-[480px] border-r  border-lightGray md:min-w-[350px] md:w-full w-[80px] h-full bg-slateGray relative">
+        <aside className="max-w-[480px] border-r  border-[#1e1f21] md:min-w-[350px] md:w-full w-[80px] h-full bg-main relative">
             <SidebarHeader data={currentUser} />
             <SidebarSearch />
             {/* <div className="block md:hidden absolute top-2 right-2">

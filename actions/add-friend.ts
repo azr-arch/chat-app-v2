@@ -18,6 +18,13 @@ export const addFriendHandler = async ({ email }: { email: string }) => {
             },
         });
 
+        // If given friend's email is yours
+        if (currUser.email === email) {
+            return {
+                error: "Can't add yourself!, please check the given email",
+            };
+        }
+
         // Friend with given email doesnt exists
         if (!friendExists)
             return {

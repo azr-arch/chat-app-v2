@@ -3,7 +3,6 @@ import { db } from "@/lib/prisma-db";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request, { params }: { params: { chatId: string } }) {
-    console.log(params.chatId);
     try {
         const currUser = await getCurrentUser();
 

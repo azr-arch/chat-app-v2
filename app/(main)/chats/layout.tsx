@@ -5,13 +5,13 @@ import { SocketProvider } from "@/context/socket";
 import { SocketIndicator } from "@/components/socket-indicator";
 import { getChats } from "@/actions/get-chat/get-chats";
 import { AddUserModal } from "@/components/modals/add-user.modal";
+import { currentUser } from "@/lib/auth";
 
 const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
-    const currUser = await getCurrentUser();
+    const currUser = await currentUser(true);
 
     if (!currUser) {
         return redirect("/");
-        return;
     }
 
     const availableChats = await getChats();
@@ -20,7 +20,7 @@ const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
         <SocketProvider>
             <div className="w-full h-full flex relative">
                 <AddUserModal />
-                <SocketIndicator />
+                {/* <SocketIndicator /> */}
                 <Sidebar currentUser={currUser} chats={availableChats} />
                 {children}
             </div>

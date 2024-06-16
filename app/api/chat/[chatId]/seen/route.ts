@@ -35,6 +35,11 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
             return NextResponse.json(chat);
         }
 
+        if (lastMessage.seenIds.includes(currentUser.id)) {
+            // Already seen the message
+            return new NextResponse("Done");
+        }
+
         const updatedMessage = await db.message.update({
             where: {
                 id: lastMessage.id,
@@ -66,12 +71,10 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
         //     });
         // }
 
-        chat.participants.map((participant) => {
-            console.log("seenIDs: ", updatedMessage.seenIds);
-            pusherServer.trigger(participant.email!, "chat:update", {
+        chat.participants.map((user) => {
+            pusherServer.trigger(user.email!, "chat:update", {
                 id: params.chatId,
-                messages: [updatedMessage],
-                // chatUnreadCount: updatedMessage.seenIds.length < 2 ? chat.unreadCount : 0,
+                message: updatedMessage,
             });
         });
 

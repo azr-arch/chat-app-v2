@@ -1,9 +1,12 @@
-import { withAuth } from "next-auth/middleware";
+import authConfig from "./auth.config";
+import NextAuth from "next-auth";
 
-export default withAuth({
-    pages: {
-        signIn: "/",
-    },
+const { auth } = NextAuth(authConfig);
+
+export default auth((req) => {
+    const { url } = req;
+    const isLoggedIn = !!req.auth;
+    console.log("URL and LOGGEDIN: ", url, isLoggedIn);
 });
 
 export const config = {

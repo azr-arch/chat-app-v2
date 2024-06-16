@@ -18,6 +18,7 @@ const buttonVariants = cva(
                 link: "text-primary underline-offset-4 hover:underline",
                 submit: "focus-visible:ring-0 focus-visible:ring-offset-1 focus-visible:ring-lightGray",
                 transparent: "hover:text-white",
+                primary: "bg-blue-500 text-primary-foreground hover:bg-blue-500/80",
             },
             size: {
                 default: "h-10 px-4 py-2",

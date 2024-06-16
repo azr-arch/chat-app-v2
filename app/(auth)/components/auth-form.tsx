@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
+import { ElementRef, useCallback, useEffect, useRef, useState } from "react";
+import { useForm, FieldValues, SubmitHandler, FieldErrors } from "react-hook-form";
 
 import { FormInput } from "@/components/form/form-input";
 import { Button } from "@/components/ui/button";
@@ -12,12 +12,31 @@ import { signIn, useSession } from "next-auth/react";
 
 import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/actions/get-current-user";
+import { FormSubmit } from "@/components/form/form-submit";
+
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "@/components/ui/input";
+import { LoginForm } from "./login-form";
+import { RegisterForm } from "./register-form";
+import Image from "next/image";
 
 type FormVariant = "LOGIN" | "REGISTER";
+
+const LoginFormSchema = z.object({
+    email: z
+        .string({ required_error: "Email is required" })
+        .email({ message: "Invalid email address" }),
+    password: z.string({ required_error: " Password is required" }),
+});
+
+type LoginFormValues = z.infer<typeof LoginFormSchema>;
 
 export const AuthForm = () => {
     const session = useSession();
     const router = useRouter();
+
+    // const formRef = useRef<ElementRef<"form">>(null);
 
     const [formVariant, setFormVariant] = useState<FormVariant>("LOGIN");
     const [isLoading, setIsLoading] = useState(false);
@@ -40,83 +59,72 @@ export const AuthForm = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<FieldValues>({
+    } = useForm<LoginFormValues>({
+        resolver: zodResolver(LoginFormSchema),
         defaultValues: {
-            name: "",
             email: "",
             password: "",
         },
     });
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        setIsLoading(true);
-
-        if (formVariant === "LOGIN") {
-            // Login form
-            signIn("credentials", {
-                ...data,
-                redirect: false,
-            })
-                .then((cb) => {
-                    console.log({ cb });
-                    if (cb?.error) {
-                        toast.error("Invalid credentials");
-                    }
-
-                    if (cb?.ok && !cb.error) {
-                        toast.success("Logged in!");
-                        router.push("/chats");
-                    }
-                })
-                .finally(() => setIsLoading(false));
-        }
-
-        if (formVariant === "REGISTER") {
-            // Register form
-            axios
-                .post("/api/register", data)
-                .then(() => {
-                    toast.success("Account created!");
-                    router.push("/chats");
-                })
-                .catch(() => toast.error("Something went wrong!"))
-                .finally(() => setIsLoading(false));
-        }
+        //     setIsLoading(true);
+        //     // console.log("click");
+        //     // console.log({ data });
+        //     // try {
+        //     // } catch (error) {
+        //     //     console.log({ errors });
+        //     // }
+        //     if (formVariant === "LOGIN") {
+        //         // Login form
+        //         signIn("credentials", {
+        //             ...data,
+        //             redirect: false,
+        //         })
+        //             .then((cb) => {
+        //                 console.log({ cb });
+        //                 if (cb?.error) {
+        //                     toast.error("Invalid credentials");
+        //                 }
+        //                 if (cb?.ok && !cb.error) {
+        //                     toast.success("Logged in!");
+        //                     router.push("/chats");
+        //                 }
+        //             })
+        //             .finally(() => setIsLoading(false));
+        //     }
+        //     if (formVariant === "REGISTER") {
+        //         // Register form
+        //         axios
+        //             .post("/api/register", data)
+        //             .then(() => {
+        //                 toast.success("Account created!");
+        //                 router.push("/chats");
+        //             })
+        //             .catch(() => toast.error("Something went wrong!"))
+        //             .finally(() => setIsLoading(false));
+        //     }
     };
 
     return (
         <div className="p-6 rounded-md bg-white mt-8 w-full">
-            <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
-                {formVariant === "REGISTER" && (
-                    <FormInput
-                        id="name"
-                        placeholder="Name"
-                        register={register}
-                        errors={errors}
-                        disabled={isLoading}
-                    />
-                )}
-                <FormInput
-                    id="email"
-                    placeholder="Email Address"
-                    register={register}
-                    errors={errors}
-                    disabled={isLoading}
-                />
-                <FormInput
-                    id="password"
-                    placeholder="Password"
-                    register={register}
-                    errors={errors}
-                    disabled={isLoading}
-                />
-
-                <div>
-                    <Button disabled={isLoading} className="w-full" variant={"default"}>
-                        {formVariant === "LOGIN" ? "Login" : "Register"}
-                    </Button>
+            <div className="sm:mx-auto  sm:max-w-md flex flex-col items-center justify-center mb-10 gap-y-2">
+                <div className="flex items-center justify-center">
+                    <Image src={"/logo.svg"} width={40} height={40} alt="logo" />
                 </div>
-            </form>
+                <div className="space-y-1">
+                    <h2 className=" text-2xl text-gray-900 font-bold text-center">
+                        {formVariant === "LOGIN" ? "Sign in to Chatly" : "Create your account"}
+                    </h2>
+                    <p className="text-sm text-neutral-500 ">
+                        {formVariant === "LOGIN"
+                            ? "Welcome back! Please sign in to continue."
+                            : "Welcome! Please fill in the details to get started."}
+                    </p>
+                </div>
+            </div>
+
+            {formVariant === "LOGIN" ? <LoginForm /> : <RegisterForm />}
 
             <p
                 onClick={toggleVariant}

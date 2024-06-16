@@ -7,7 +7,6 @@ import { MessagePayload, TypingStatusPayload } from "@/lib/types";
 
 export const useSocketHandler = (socket: Socket | null) => {
     const sendMessage = (payload: MessagePayload) => {
-        console.log("sending message with SocketHandler");
         return new Promise((resolve, reject) => {
             if (!socket?.connected) {
                 reject("Socket not connected");

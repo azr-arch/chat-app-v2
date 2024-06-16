@@ -12,6 +12,8 @@ import { find } from "lodash";
 import { useProfileSidebar } from "@/hooks/use-profile-sidebar";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { ProfileSidebar } from "./profile-sidebar";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 interface SidebarProps {
     currentUser: User;
@@ -29,21 +31,18 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
         const updateChatHandler = (data: {
             id: string;
             message: FullMessageType;
-            chat: FullChatType;
             // chatUnreadCount: number;
         }) => {
             if (!data.message) return;
             setInitialChats((prev) =>
                 prev.map((prevChat) => {
                     if (prevChat.id === data.id) {
-                        console.log(data);
-                        if (!find(prevChat.messages, { id: data.message.id })) {
-                            return {
-                                ...prevChat,
-                                messages: [...prevChat.messages, data.message],
-                                // unreadCount: data.chatUnreadCount,
-                            };
-                        }
+                        // if (!find(prevChat.messages, { id: data.message.id })) {
+                        return {
+                            ...prevChat,
+                            messages: [...prevChat.messages, data.message],
+                        };
+                        // }
                     }
                     return prevChat;
                 })
@@ -72,12 +71,21 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
             {/* <ChatList data={chats} /> */}
 
             {/* Profile Nav */}
+            <div
+                data-profile-drawer-state={isOpen}
+                className="absolute top-0 left-0 z-50 w-full h-full bg-black data-[profile-drawer-state=true]:opacity-100  data-[profile-drawer-state=true]:translate-x-0 data-[profile-drawer-state=false]:opacity-0 data-[profile-drawer-state=false]:-translate-x-full data-[profile-drawer-state=false]:-z-10 transition-all duration-200 ease-in-out"
+            >
+                {/* Close Button  */}
+                <button
+                    className="absolute top-4 right-4 p-2 active:outline active:outline-light-black rounded-md text-accent-2 bg-transparent transition hover:text-white"
+                    onClick={onClose}
+                >
+                    <X className="w-4 h-4" />
+                </button>
 
-            <Sheet open={isOpen} onOpenChange={onClose}>
-                <SheetContent side="left" className="p-2 pt-10  w-full absolute top-0 left-0">
-                    <ProfileSidebar data={currentUser} />
-                </SheetContent>
-            </Sheet>
+                {/* Profile Content */}
+                <ProfileSidebar data={currentUser} />
+            </div>
         </aside>
     );
 };

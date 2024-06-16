@@ -9,8 +9,6 @@ export const Upload = ({ chatId }: { chatId: string }) => {
     const onUpload = async (results: CldUploadWidgetResults) => {
         if (!results || !results?.info?.url) return;
 
-        console.log({ results });
-
         try {
             const res = await axios.post(`/api/chat/${chatId}/message`, {
                 image: results.info.url,

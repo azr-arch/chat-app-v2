@@ -3,19 +3,17 @@
 import { Avatar } from "@/components/avatar";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import { format, formatDistanceToNow } from "date-fns";
 import { useCallback, useMemo } from "react";
 import { FullChatType } from "@/lib/types";
 import { useOtherUser } from "@/hooks/use-other-user";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { cn, formatMessageTime } from "@/lib/utils";
+import { Check, CheckCheck } from "lucide-react";
 
 interface ChatItemProps {
     chat: FullChatType;
 }
-
-// Fix this
 
 export const ChatItem = ({ chat }: ChatItemProps) => {
     const router = useRouter();
@@ -45,6 +43,12 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
 
         if (lastMessage.content) return lastMessage.content;
     }, [lastMessage]);
+
+    const isOwn = useMemo(() => {
+        if (!lastMessage) return false;
+        if (lastMessage.sender.email === currentUserEmail) return true;
+        return false;
+    }, [currentUserEmail, lastMessage]);
 
     const isActiveChat = useMemo(() => {
         if (!params || !params.chatId) return false;
@@ -86,7 +90,15 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
                                     : " text-[#d2d3d3]"
                             )}
                         >
-                            {lastMessageText}
+                            <span className="inline-flex items-center gap-2">
+                                {isOwn &&
+                                    (isSeen ? (
+                                        <CheckCheck className="w-3 h-3" />
+                                    ) : (
+                                        <Check className="w-3 h-3" />
+                                    ))}{" "}
+                                {lastMessageText}
+                            </span>
                         </p>
 
                         {chat && (

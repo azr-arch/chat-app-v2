@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { User } from "@prisma/client";
 import moment from "moment";
 import Image from "next/image";
-import { useMemo } from "react";
 import { DateBadge } from "./date-badge";
 
 // SRC: ChatGPT
@@ -19,10 +18,6 @@ export const GroupMessage = ({ messages, otherUser, currentUserId }: GroupMessag
     let groupedMessages = [];
     let currentGroup: (FullMessageType & { isNewDay?: boolean })[] = [];
     let currentDate = null;
-
-    // const isReceiver = useMemo(() => {
-    //     otherUser.id !== currentUserId;
-    // }, [currentUserId, otherUser.id]);
 
     if (messages.length <= 0) {
         return null;

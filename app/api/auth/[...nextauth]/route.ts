@@ -1,56 +1,58 @@
-import bcrypt from "bcrypt";
-import NextAuth, { AuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+// import bcrypt from "bcrypt";
+// import NextAuth, { AuthOptions } from "next-auth";
+// import CredentialsProvider from "next-auth/providers/credentials";
+// import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
-import { db } from "@/lib/prisma-db";
+// import { db } from "@/lib/prisma-db";
 
-export const authOptions: AuthOptions = {
-    adapter: PrismaAdapter(db),
-    providers: [
-        CredentialsProvider({
-            name: "credentials",
-            credentials: {
-                email: { label: "email", type: "text" },
-                password: { label: "password", type: "password" },
-            },
+// export const authOptions: AuthOptions = {
+//     adapter: PrismaAdapter(db),
+//     providers: [
+//         CredentialsProvider({
+//             name: "credentials",
+//             credentials: {
+//                 email: { label: "email", type: "text" },
+//                 password: { label: "password", type: "password" },
+//             },
 
-            async authorize(credentials) {
-                if (!credentials?.email || !credentials.password) {
-                    throw new Error("Invalid credentials");
-                }
+//             async authorize(credentials) {
+//                 if (!credentials?.email || !credentials.password) {
+//                     throw new Error("Invalid credentials");
+//                 }
 
-                const user = await db.user.findUnique({
-                    where: {
-                        email: credentials.email,
-                    },
-                });
+//                 const user = await db.user.findUnique({
+//                     where: {
+//                         email: credentials.email,
+//                     },
+//                 });
 
-                if (!user || !user?.hashedPassword) {
-                    throw new Error("Invalid credentials");
-                }
+//                 if (!user || !user?.hashedPassword) {
+//                     throw new Error("Invalid credentials");
+//                 }
 
-                const isCorrectPass = await bcrypt.compare(
-                    credentials.password,
-                    user.hashedPassword
-                );
+//                 const isCorrectPass = await bcrypt.compare(
+//                     credentials.password,
+//                     user.hashedPassword
+//                 );
 
-                if (!isCorrectPass) {
-                    throw new Error("Invalid credentials");
-                }
+//                 if (!isCorrectPass) {
+//                     throw new Error("Invalid credentials");
+//                 }
 
-                return user;
-            },
-        }),
-    ],
+//                 return user;
+//             },
+//         }),
+//     ],
 
-    debug: process.env.NODE_ENV === "development",
-    session: {
-        strategy: "jwt",
-    },
+//     debug: process.env.NODE_ENV === "development",
+//     session: {
+//         strategy: "jwt",
+//     },
 
-    secret: process.env.NEXTAUTH_SECRET,
-};
-const handler = NextAuth(authOptions);
+//     secret: process.env.NEXTAUTH_SECRET,
+// };
+// const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST };
+// export { handler as GET, handler as POST };
+
+export { GET, POST } from "@/auth";

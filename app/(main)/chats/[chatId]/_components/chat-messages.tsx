@@ -77,7 +77,7 @@ export const ChatMessages = ({ chatData, currentUserId }: ChatMessagesProps) => 
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView();
-    }, [messages]);
+    }, [messages, debouncedIsTyping]);
 
     return (
         <div

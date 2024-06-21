@@ -32,9 +32,10 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
         if (!lastMessage) return false;
 
         const seenArr = lastMessage.seen || [];
-        `if (!currentUserEmail) return false;`;
+        if (!currentUserEmail) return false;
 
-        return seenArr.filter((item) => item.email === currentUserEmail).length !== 0;
+        // in seen arr there exists a person other than me
+        return seenArr.filter((item) => item.email !== currentUserEmail).length !== 0;
     }, [currentUserEmail, lastMessage]);
 
     const lastMessageText = useMemo(() => {
@@ -46,7 +47,7 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
 
     const isOwn = useMemo(() => {
         if (!lastMessage) return false;
-        if (lastMessage.sender.email === currentUserEmail) return true;
+        if (lastMessage?.sender?.email === currentUserEmail) return true;
         return false;
     }, [currentUserEmail, lastMessage]);
 
@@ -108,7 +109,7 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
                         )}
                     </div>
 
-                    {!isSeen ? (
+                    {!isOwn && !isSeen && lastMessageText !== "Started a chat" ? (
                         <span className="rounded-full p-1 absolute right-20 top-1/2 -translate-y-1/2  flex items-center justify-center text-[10px] 2xl:text-xs font-medium bg-[#fb734b] text-white"></span>
                     ) : null}
                 </div>

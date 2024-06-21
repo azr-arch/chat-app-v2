@@ -82,7 +82,7 @@ export const ChatMessages = ({ chatData, currentUserId }: ChatMessagesProps) => 
     return (
         <div
             style={{ maxHeight: "calc(100% - 150px)", scrollbarWidth: "none" }}
-            className="overflow-y-scroll w-full flex-grow flex flex-col  gap-2 px-4 "
+            className="overflow-y-scroll w-full flex-grow flex flex-col  gap-2 px-4 relative"
         >
             {messages.length > 0 ? (
                 <GroupMessage
@@ -91,7 +91,7 @@ export const ChatMessages = ({ chatData, currentUserId }: ChatMessagesProps) => 
                     currentUserId={currentUserId}
                 />
             ) : (
-                <p className="text-sm font-medium text-accent-3">
+                <p className="text-sm font-medium text-accent-3 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
                     Send a message to start the conversation
                 </p>
             )}

@@ -8,7 +8,7 @@ import { AddUserModal } from "@/components/modals/add-user.modal";
 import { currentUser } from "@/lib/auth";
 
 const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
-    const currUser = await currentUser(true);
+    const currUser = await getCurrentUser();
 
     if (!currUser) {
         return redirect("/");

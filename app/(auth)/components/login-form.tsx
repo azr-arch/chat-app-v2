@@ -19,6 +19,8 @@ import { Button } from "@/components/ui/button";
 import { FormErrors } from "@/components/form/form-errors";
 import { useState, useTransition } from "react";
 import { login } from "@/actions/login";
+import { toast } from "sonner";
+import { FormSubmit } from "@/components/form/form-submit";
 
 export const LoginForm = () => {
     const [isPending, startTransition] = useTransition();
@@ -39,6 +41,8 @@ export const LoginForm = () => {
                     if (data?.errors) {
                         setError(data?.message);
                     }
+                    form.reset();
+                    toast.success("Login succesfully");
                 })
                 .catch((error) => console.log(error));
         });
@@ -97,9 +101,12 @@ export const LoginForm = () => {
                 </div>
 
                 <FormErrors message={error} />
-                <Button disabled={isPending} type="submit" className="w-full">
+                {/* <Button disabled={isPending} type="submit" className="w-full">
                     Login
-                </Button>
+                </Button> */}
+                <FormSubmit className="w-full" disabled={isPending}>
+                    Login
+                </FormSubmit>
             </form>
         </Form>
     );

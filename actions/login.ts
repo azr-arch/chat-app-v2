@@ -16,11 +16,12 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     const { email, password } = validateFields.data;
 
     try {
-        await signIn("credentials", {
+        const res = await signIn("credentials", {
             email,
             password,
-            // redirectTo: "/chats",
         });
+
+        console.log("LOGIN ACTION RES: ", res);
     } catch (error) {
         console.log("Error from actions: ", error);
         if (error instanceof AuthError) {

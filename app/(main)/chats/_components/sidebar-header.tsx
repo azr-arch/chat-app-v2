@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAddFriendModal } from "@/hooks/use-add-friend-modal";
 import { useProfileSidebar } from "@/hooks/use-profile-sidebar";
 import { User } from "@prisma/client";
-import { MessageSquarePlus } from "lucide-react";
+import { MessageSquarePlus, Plus } from "lucide-react";
 import Image from "next/image";
 
 interface SidebarHeaderProps {
@@ -23,7 +23,12 @@ export const SidebarHeader = ({ data }: SidebarHeaderProps) => {
                 onClick={onOpen}
                 className="w-10 h-10 relative rounded-full bg-black mr-4 outline outline-light-black overflow-hidden"
             >
-                <Image src={data?.image || "/placeholder.png"} fill alt={`${data.name}'s avatar`} />
+                <Image
+                    src={data?.image || "/placeholder.png"}
+                    className="object-cover"
+                    fill
+                    alt={`${data.name}'s avatar`}
+                />
             </div>
 
             {/* Todo add options */}
@@ -31,11 +36,11 @@ export const SidebarHeader = ({ data }: SidebarHeaderProps) => {
             <Button
                 onClick={openAddFriend}
                 title="Add Friend"
-                className=" ml-auto "
-                size={"sm"}
-                variant={"secondary"}
+                className=" ml-auto bg-light-black "
+                size={"icon"}
+                variant={"primary"}
             >
-                <MessageSquarePlus className="w-5 h-5 " />
+                <Plus className="w-5 h-5 " />
             </Button>
         </div>
     );

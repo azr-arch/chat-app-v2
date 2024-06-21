@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { FormErrors } from "@/components/form/form-errors";
 import { useState, useTransition } from "react";
 import { register } from "@/actions/register";
+import { toast } from "sonner";
 
 export const RegisterForm = () => {
     const [isPending, startTransition] = useTransition();
@@ -36,7 +37,6 @@ export const RegisterForm = () => {
     const fileRef = form.register("profilePicture", { required: true });
 
     const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-        console.log("Submitting ");
         const validateFields = RegisterSchema.safeParse(values);
 
         if (!validateFields.success) {
@@ -67,6 +67,8 @@ export const RegisterForm = () => {
                         setError(data.message);
                         return;
                     }
+                    form.reset();
+                    toast.success("Registered succesfully!");
                 })
                 .catch((err) => console.log(err));
         });
@@ -82,10 +84,6 @@ export const RegisterForm = () => {
                     }
                 }}
                 className="space-y-6"
-                // action={() => {
-                //     console.log("form submit");
-                //     form.handleSubmit(onSubmit);
-                // }}
             >
                 <div className="space-y-4">
                     <FormField

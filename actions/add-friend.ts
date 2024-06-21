@@ -5,6 +5,7 @@ import { getCurrentUser } from "./get-current-user";
 import { revalidatePath } from "next/cache";
 
 export const addFriendHandler = async ({ email }: { email: string }) => {
+    let newChat;
     try {
         const currUser = await getCurrentUser();
         if (!currUser || !email)
@@ -12,36 +13,30 @@ export const addFriendHandler = async ({ email }: { email: string }) => {
                 error: "Invalid fields",
             };
 
-        const friendExists = await db.user.findUnique({
+        const friend = await db.user.findUnique({
             where: {
                 email,
             },
         });
 
-        // If given friend's email is yours
-        if (currUser.email === email) {
+        if (!friend) {
             return {
-                error: "Can't add yourself!, please check the given email",
+                error: "Friend not found!",
             };
         }
 
-        // Friend with given email doesnt exists
-        if (!friendExists)
-            return {
-                error: "User not found",
-            };
-
+        // Find an already existing chat with curr user and friend
         const existingChat = await db.chat.findFirst({
             where: {
                 OR: [
                     {
                         userIds: {
-                            equals: [currUser.id, friendExists.id],
+                            equals: [currUser.id, friend.id],
                         },
                     },
                     {
                         userIds: {
-                            equals: [friendExists.id, currUser.id],
+                            equals: [friend.id, currUser.id],
                         },
                     },
                 ],
@@ -50,11 +45,11 @@ export const addFriendHandler = async ({ email }: { email: string }) => {
 
         if (existingChat) {
             return {
-                error: "already a friend",
+                error: "Already a friend!",
             };
         }
 
-        const newChat = await db.chat.create({
+        newChat = await db.chat.create({
             data: {
                 participants: {
                     connect: [
@@ -62,7 +57,7 @@ export const addFriendHandler = async ({ email }: { email: string }) => {
                             id: currUser.id,
                         },
                         {
-                            id: friendExists.id,
+                            id: friend.id,
                         },
                     ],
                 },
@@ -71,15 +66,15 @@ export const addFriendHandler = async ({ email }: { email: string }) => {
                 participants: true,
             },
         });
-
-        revalidatePath("/chats");
-
-        return {
-            data: newChat,
-        };
     } catch (error) {
         return {
             error: "Internal error",
         };
     }
+
+    revalidatePath("/");
+
+    return {
+        data: newChat,
+    };
 };

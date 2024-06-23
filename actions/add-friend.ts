@@ -8,6 +8,8 @@ export const addFriendHandler = async ({ email }: { email: string }) => {
     let newChat;
     try {
         const currUser = await getCurrentUser();
+        console.log("Friends: ", currUser?.friends);
+
         if (!currUser || !email)
             return {
                 error: "Invalid fields",
@@ -42,6 +44,7 @@ export const addFriendHandler = async ({ email }: { email: string }) => {
                 ],
             },
         });
+        // const existingChat = currUser.friends.
 
         if (existingChat) {
             return {
@@ -67,6 +70,7 @@ export const addFriendHandler = async ({ email }: { email: string }) => {
             },
         });
     } catch (error) {
+        console.log({ error });
         return {
             error: "Internal error",
         };
@@ -78,3 +82,53 @@ export const addFriendHandler = async ({ email }: { email: string }) => {
         data: newChat,
     };
 };
+
+// PART OF FRIEND COLLECTION IMPLEMENTATION
+
+// async function createFriendship(currUserId: string, friendId: string) {
+//     try {
+//         // await db.user.update({
+//         //     where: { id: currUserId },
+//         //     data: { friends: { connect: { id: friendId } } },
+//         // });
+
+//         // await db.user.update({
+//         //     where: { id: friendId },
+//         //     data: { friends: { connect: { id: currUserId } } },
+//         // });
+
+//         // Creating a mutual friendship
+//         await db.user.update({
+//             where: { id: currUserId },
+//             include: { friends: true },
+//             data: {
+//                 friends: {
+//                     connect: [
+//                         {
+//                             id: friendId,
+//                         },
+//                     ],
+//                 },
+//             },
+//         });
+
+//         await db.user.update({
+//             where: { id: friendId },
+//             include: { friends: true },
+//             data: {
+//                 friends: {
+//                     connect: [
+//                         {
+//                             id: currUserId,
+//                         },
+//                     ],
+//                 },
+//             },
+//         });
+
+//         console.log(`Friendship created between users ${currUserId} and ${friendId}`);
+//     } catch (error) {
+//         console.error("Error creating friendship:", error);
+//         throw error;
+//     }
+// }

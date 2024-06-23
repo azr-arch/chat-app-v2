@@ -35,17 +35,18 @@ export const LoginForm = () => {
     });
 
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-        startTransition(() => {
-            login(values)
-                .then((data) => {
-                    if (data?.errors) {
-                        setError(data?.message);
-                    }
-                    form.reset();
-                    toast.success("Login succesfully");
-                })
-                .catch((error) => console.log(error));
-        });
+        login(values)
+            .then((data) => {
+                if (data?.errors) {
+                    startTransition(() => {
+                        setError(data?.error);
+                    });
+                    return;
+                }
+                form.reset();
+                toast.success("Login succesfully");
+            })
+            .catch((error) => console.log(error));
     };
 
     return (

@@ -27,6 +27,7 @@ export const Avatar = ({ user, size }: AvatarProps) => {
                     fill
                     alt="user-profile"
                     className="object-cover"
+                    sizes="40"
                 />
             </div>
         </div>

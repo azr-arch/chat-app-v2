@@ -1,3 +1,5 @@
+import { SelectOptions } from "@/lib/types";
+import { User } from "@prisma/client";
 import * as z from "zod";
 
 const MAX_FILE_SIZE = 4; // In Megabytes
@@ -36,4 +38,11 @@ export const RegisterSchema = z.object({
                 ACCEPTED_IMAGE_TYPES.includes(file.type)
             );
         }, "File type is not supported"),
+});
+
+export const CreateGroupSchema = z.object({
+    name: z.string().min(1, { message: "Group name cannot be empty" }),
+    members: z
+        .custom<SelectOptions[]>()
+        .refine((members) => members.length >= 2, "Please select 2 or more members"),
 });

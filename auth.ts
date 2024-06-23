@@ -14,9 +14,24 @@ export const {
     session: { strategy: "jwt" },
     ...authConfig,
     callbacks: {
-        authorized({ auth }) {
+        authorize({ auth }) {
             const isAuthenticated = auth?.user;
             console.log("auth.ts: ", isAuthenticated);
         },
+        // async session({ session, token, user }) {
+        //     console.log({ session, token, user });
+        //     if (session?.user) {
+        //         const userExists = await db.user.findUnique({
+        //             where: {
+        //                 email: session.user.email,
+        //             },
+        //         });
+
+        //         if (userExists) {
+        //             return session;
+        //         }
+        //     }
+        //     return null;
+        // },
     },
 });

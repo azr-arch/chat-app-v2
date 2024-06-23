@@ -27,3 +27,9 @@ export interface TypingStatusPayload {
     senderId: string;
     isTyping: boolean;
 }
+
+export type SelectOptions = {
+    id: string;
+    name: string;
+    image: string;
+};

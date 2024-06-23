@@ -94,7 +94,7 @@ body,
     height: 30%;
 
     background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.4), transparent);
-    z-index: 9999;
+    z-index: 50;
 }
 
 p[data-receiver="me"] {

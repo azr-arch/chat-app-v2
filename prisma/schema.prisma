@@ -18,17 +18,30 @@ model User {
   image          String?
   hashedPassword String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // To implement many to many self relations
+  // We have to define an extra relation 
+  friendIds      String[]  @db.ObjectId
+  friends        Friends[] @relation(fields: [friendIds], references: [id])
 
-  chatIds String[] @db.ObjectId
-  chats   Chat[]   @relation(fields: [chatIds], references: [id])
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+      
+  chatIds        String[] @db.ObjectId
+  chats          Chat[]   @relation(fields: [chatIds], references: [id])
 
   seenMessageIds String[]  @db.ObjectId
   seenMessages   Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
 
-  messages Message[]
+  messages       Message[]
 }
+
+model Friends {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  userIds   String[] @db.ObjectId
+  users User[] @relation(fields: [userIds], references: [id])
+}
+
 
 model Chat {
   id String @id @default(auto()) @map("_id") @db.ObjectId
@@ -63,3 +76,4 @@ model Message {
   seenIds String[] @db.ObjectId
   seen    User[]   @relation("Seen", fields: [seenIds], references: [id])
 }
+

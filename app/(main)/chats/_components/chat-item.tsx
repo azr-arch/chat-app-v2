@@ -47,7 +47,11 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
 
     const isOwn = useMemo(() => {
         if (!lastMessage) return false;
-        if (lastMessage?.sender?.email === currentUserEmail) return true;
+
+        if (lastMessage?.sender?.email === currentUserEmail) {
+            return true;
+        }
+
         return false;
     }, [currentUserEmail, lastMessage]);
 
@@ -68,6 +72,8 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
             console.log(error);
         }
     }, [chat.id, router]);
+
+    console.log({ isOwn, isSeen, lastMessageText });
 
     return (
         <li

@@ -15,10 +15,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Select } from "../select";
 import { CreateGroupForm } from "../form/create-group-form";
+import { SelectOptions } from "@/lib/types";
 
 // Todo add zod + react hook form for validation
 interface AddUserModalProps {
-    friends?: User[];
+    friends?: SelectOptions[];
 }
 
 export const AddUserModal = ({ friends }: AddUserModalProps) => {
@@ -174,7 +175,7 @@ export const AddUserModal = ({ friends }: AddUserModalProps) => {
                     <CreateGroupForm />
                 )} */}
 
-                <CreateGroupForm />
+                <CreateGroupForm friends={friends} />
             </div>
         </div>
     );

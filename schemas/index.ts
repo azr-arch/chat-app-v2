@@ -40,9 +40,13 @@ export const RegisterSchema = z.object({
         }, "File type is not supported"),
 });
 
+const MemberInfoSchema = z.object({
+    name: z.string(),
+    image: z.string(),
+    email: z.string(),
+});
+
 export const CreateGroupSchema = z.object({
     name: z.string().min(1, { message: "Group name cannot be empty" }),
-    members: z
-        .custom<SelectOptions[]>()
-        .refine((members) => members.length >= 2, "Please select 2 or more members"),
+    members: z.array(MemberInfoSchema).min(1, "Minimum 1 person is required"),
 });

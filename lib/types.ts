@@ -29,7 +29,7 @@ export interface TypingStatusPayload {
 }
 
 export type SelectOptions = {
-    id: string;
     name: string;
     image: string;
+    email: string; // For temp, we can use id instead
 };

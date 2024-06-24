@@ -1,7 +1,6 @@
-import { db } from "@/lib/prisma-db";
+"use client";
+
 import { Select } from "../select";
-import { User } from "next-auth";
-import { FormInput } from "./form-input";
 import {
     Form,
     FormControl,
@@ -14,50 +13,46 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { CreateGroupSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormErrors } from "./form-errors";
 import { FormSubmit } from "./form-submit";
 import { Input } from "../ui/input";
-import { useTransition } from "react";
+import { ElementRef, useRef } from "react";
+import { createGroupAction } from "@/actions/create-group";
+import { SelectOptions } from "@/lib/types";
+import { useSafeAction } from "@/hooks/use-safe-action";
+import { toast } from "sonner";
+import { useAddFriendModal } from "@/hooks/use-add-friend-modal";
 
-const dummyOptions = [
-    {
-        id: "1",
-        name: "azar",
-        image: "fake",
-    },
-    {
-        id: "2",
-        name: "azain",
-        image: "fake",
-    },
-    {
-        id: "3",
-        name: "aman",
-        image: "fake",
-    },
-    {
-        id: "4",
-        name: "adnan",
-        image: "fake",
-    },
-];
+export const CreateGroupForm = ({ friends }: { friends?: SelectOptions[] }) => {
+    const { onClose } = useAddFriendModal();
 
-export const CreateGroupForm = () => {
-    const [isPending, startTransition] = useTransition();
-    // const availableFriends = async () => {
-    // const data = await;
-    // const data = await getAllFriends();
-    // // };
+    const { execute, isLoading } = useSafeAction(createGroupAction, {
+        onError: (data) => {
+            toast.error(data);
+        },
+        onSuccess: () => {
+            toast.success("Group created succesfully.");
+            onClose();
+        },
+    });
 
-    // if (!data) {
-    //     return <div>No Data found</div>;
-    // }
     const form = useForm<z.infer<typeof CreateGroupSchema>>({
         resolver: zodResolver(CreateGroupSchema),
         defaultValues: {
             name: "",
         },
     });
+
+    const formRef = useRef<ElementRef<"form">>(null);
+
+    const onSubmit = (data: FormData) => {
+        const name = data.get("name") as string;
+        const members = form.getValues("members");
+
+        execute({
+            name,
+            members,
+        });
+    };
 
     return (
         <div className="space-y-4 ">
@@ -67,15 +62,7 @@ export const CreateGroupForm = () => {
             </div>
 
             <Form {...form}>
-                <form
-                    // onSubmit={form.handleSubmit(onSubmit)}
-                    // onChange={() => {
-                    //     if (error) {
-                    //         setError(undefined);
-                    //     }
-                    // }}
-                    className="space-y-6 "
-                >
+                <form ref={formRef} action={onSubmit} className="space-y-6 ">
                     <div className="space-y-4">
                         <FormField
                             control={form.control}
@@ -85,10 +72,10 @@ export const CreateGroupForm = () => {
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input
-                                            disabled={isPending}
                                             {...field}
                                             placeholder="Lorem ipsum"
                                             type="text"
+                                            disabled={isLoading}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -105,7 +92,7 @@ export const CreateGroupForm = () => {
                                     <FormLabel>Members</FormLabel>
                                     <FormControl>
                                         <Select
-                                            options={dummyOptions}
+                                            options={friends}
                                             onChange={field.onChange}
                                             value={field.value}
                                         />
@@ -116,11 +103,10 @@ export const CreateGroupForm = () => {
                         />
                     </div>
 
-                    {/* <FormErrors message={error} /> */}
-                    {/* <Button disabled={isPending} type="submit" className="w-full">
-                    Login
-                </Button> */}
-                    <FormSubmit className="ml-auto  float-right self-end" disabled={isPending}>
+                    <FormSubmit
+                        className="ml-auto  float-right self-end"
+                        disabled={form.formState.isSubmitting || isLoading}
+                    >
                         Create
                     </FormSubmit>
                 </form>

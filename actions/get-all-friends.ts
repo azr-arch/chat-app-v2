@@ -34,6 +34,11 @@ export const getAllFriends = async () => {
                 email: currUser.email,
             },
         },
+        select: {
+            email: true,
+            name: true,
+            image: true,
+        },
         orderBy: {
             createdAt: "desc",
         },

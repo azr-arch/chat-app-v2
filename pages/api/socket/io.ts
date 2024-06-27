@@ -1,11 +1,12 @@
 // /api/socket/io.ts
 
-import { handleSendMessage, handleTypingStatus } from "@/pages/handler/socket";
+import { handleSendMessage, handleTypingStatus, handleUser } from "@/pages/handler/socket";
 import type { Server as HTTPServer } from "http";
 import type { Socket as NetSocket } from "net";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Server as IOServer } from "socket.io";
 import { Server } from "socket.io";
+import { UserManager } from "../manager/user-manager";
 
 interface SocketServer extends HTTPServer {
     io?: IOServer | undefined;
@@ -29,12 +30,17 @@ export default function SocketHandler(req: NextApiRequest, res: NextApiResponseW
     const io = new Server(res.socket.server);
     res.socket.server.io = io;
 
+    const userManager = new UserManager();
+
     io.on("connection", (socket) => {
         // SEND_MESSAGE
         handleSendMessage(socket);
 
         // TYPING_STATUS
         handleTypingStatus(socket);
+
+        //
+        handleUser(socket);
     });
 
     console.log("Setting up socket");

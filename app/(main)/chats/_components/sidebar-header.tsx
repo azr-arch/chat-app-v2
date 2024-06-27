@@ -34,26 +34,14 @@ export const SidebarHeader = ({ data }: SidebarHeaderProps) => {
             {/* Todo add options */}
 
             <div className="ml-auto space-x-2">
-                {/* Start a private conversation Button */}
                 <Button
-                    onClick={() => openAddFriend("private")}
+                    onClick={() => openAddFriend()}
                     title="Add Friend"
                     className="  bg-light-black "
                     size={"icon"}
                     variant={"primary"}
                 >
                     <Plus className="w-5 h-5 " />
-                </Button>
-
-                {/* Start a group conversation Button */}
-                <Button
-                    onClick={() => openAddFriend("group")}
-                    title="Create a group"
-                    className="  bg-light-black  "
-                    size={"icon"}
-                    variant={"primary"}
-                >
-                    <Users className="w-5 h-5" />
                 </Button>
             </div>
         </div>

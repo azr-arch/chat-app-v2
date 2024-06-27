@@ -12,9 +12,6 @@ export const getCurrentUser = async () => {
             where: {
                 email: session.user.email,
             },
-            include: {
-                friends: true,
-            },
         });
         return currentUser;
     } catch (error: any) {

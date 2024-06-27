@@ -47,7 +47,6 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
 
     const isOwn = useMemo(() => {
         if (!lastMessage) return false;
-
         if (lastMessage?.sender?.email === currentUserEmail) {
             return true;
         }
@@ -73,8 +72,6 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
         }
     }, [chat.id, router]);
 
-    console.log({ isOwn, isSeen, lastMessageText });
-
     return (
         <li
             key={otherUser?.id}
@@ -93,8 +90,8 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
                             className={cn(
                                 "text-xs ",
                                 isSeen || lastMessageText === "Started a chat"
-                                    ? " text-[#656668]"
-                                    : " text-[#d2d3d3]"
+                                    ? " text-[#d2d3d3]"
+                                    : " text-[#656668]"
                             )}
                         >
                             <span className="inline-flex items-center gap-2">
@@ -115,9 +112,9 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
                         )}
                     </div>
 
-                    {!isOwn && !isSeen && lastMessageText !== "Started a chat" ? (
+                    {/* {!isOwn && !isSeen && lastMessageText !== "Started a chat" ? (
                         <span className="rounded-full p-1 absolute right-20 top-1/2 -translate-y-1/2  flex items-center justify-center text-[10px] 2xl:text-xs font-medium bg-[#fb734b] text-white"></span>
-                    ) : null}
+                    ) : null} */}
                 </div>
             </Link>
         </li>

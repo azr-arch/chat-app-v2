@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { FormSubmit } from "@/components/form/form-submit";
 
 export const LoginForm = () => {
+    const [loading, setLoading] = useState(false);
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<undefined | string>(undefined);
 
@@ -35,6 +36,8 @@ export const LoginForm = () => {
     });
 
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+        setLoading(true); // This is temporary, not a good practice
+
         login(values)
             .then((data) => {
                 if (data?.errors) {
@@ -46,7 +49,8 @@ export const LoginForm = () => {
                 form.reset();
                 toast.success("Login succesfully");
             })
-            .catch((error) => console.log(error));
+            .catch((error) => console.log(error))
+            .finally(() => setLoading(false));
     };
 
     return (
@@ -102,9 +106,6 @@ export const LoginForm = () => {
                 </div>
 
                 <FormErrors message={error} />
-                {/* <Button disabled={isPending} type="submit" className="w-full">
-                    Login
-                </Button> */}
                 <FormSubmit className="w-full" disabled={isPending}>
                     Login
                 </FormSubmit>

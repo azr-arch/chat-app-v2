@@ -14,6 +14,10 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { ProfileSidebar } from "./profile-sidebar";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { useOnlineList } from "@/hooks/use-online-list";
+import { useSocket } from "@/context/socket";
+import { useSocketHandler } from "@/hooks/use-socket-handler";
+import { USER_ONLINE } from "@/lib/constants";
 
 interface SidebarProps {
     currentUser: User;
@@ -23,6 +27,23 @@ interface SidebarProps {
 export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
     const [initialChats, setInitialChats] = useState<FullChatType[]>(chats);
     const { isOpen, onClose } = useProfileSidebar();
+    const { socket } = useSocket();
+    const { registerUser } = useSocketHandler(socket);
+
+    useEffect(() => {
+        if (currentUser && socket) {
+            console.log("Registering user");
+
+            registerUser({
+                name: currentUser.name || "",
+                id: currentUser.id,
+            })
+                .then((data) => {
+                    console.log("User registered: ", data);
+                })
+                .catch((err) => console.log(err));
+        }
+    }, [currentUser, registerUser, socket]);
 
     useEffect(() => {
         if (!currentUser.email) return;

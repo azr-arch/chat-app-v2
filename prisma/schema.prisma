@@ -20,9 +20,8 @@ model User {
 
   // To implement many to many self relations
   // We have to define an extra relation 
-  friendIds      String[]  @db.ObjectId
-  friends        Friends[] @relation(fields: [friendIds], references: [id])
-
+  // friendIds      String[]  @db.ObjectId
+  // friends        Friends[] @relation(fields: [friendIds], references: [id])
 
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -36,11 +35,11 @@ model User {
   messages       Message[]
 }
 
-model Friends {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  userIds   String[] @db.ObjectId
-  users User[] @relation(fields: [userIds], references: [id])
-}
+// model Friends {
+//   id      String @id @default(auto()) @map("_id") @db.ObjectId
+//   userIds   String[] @db.ObjectId
+//   users User[] @relation(fields: [userIds], references: [id])
+// }
 
 
 model Chat {
@@ -67,7 +66,7 @@ model Message {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  chatId String @unique @db.ObjectId
+  chatId String  @db.ObjectId
   chat   Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
 
   senderId String @db.ObjectId

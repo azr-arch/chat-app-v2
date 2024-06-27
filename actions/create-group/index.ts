@@ -2,7 +2,6 @@
 
 import { createSafeAction } from "@/lib/create-safe-action";
 import { InputType, ReturnType } from "./types";
-import { auth } from "@/auth";
 import { db } from "@/lib/prisma-db";
 import { getCurrentUser } from "../get-current-user";
 import { revalidatePath } from "next/cache";
@@ -17,7 +16,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     }
 
-    const { name, members } = data;
+    const { members } = data;
     const isGroup = members.length > 2;
 
     // Add the current user too in the members list

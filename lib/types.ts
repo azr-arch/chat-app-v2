@@ -1,4 +1,5 @@
 import { Chat, Message, User } from "@prisma/client";
+import { Socket } from "socket.io-client";
 
 export type FullMessageType = Message & {
     sender: {
@@ -29,7 +30,13 @@ export interface TypingStatusPayload {
 }
 
 export type SelectOptions = {
-    name: string;
-    image: string;
-    email: string; // For temp, we can use id instead
+    name: string | null;
+    image: string | null;
+    email: string | null; // For temp, we can use id instead
 };
+
+export interface UserPayload {
+    id: string;
+    name: string;
+    socket?: Socket;
+}

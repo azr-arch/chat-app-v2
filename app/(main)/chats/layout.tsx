@@ -19,6 +19,7 @@ const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
     const friends = await getAllFriends();
 
     return (
+        // I wanna give this Socket provider a value of currentUserInfo which can be used
         <SocketProvider>
             <div className="w-full h-full flex relative">
                 <AddUserModal friends={friends} />

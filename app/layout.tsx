@@ -54,7 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
             <body className={poppins.className}>
-                <TopLoader color="#000" showSpinner={false} />
+                <TopLoader color="#ffffff" height={1} zIndex={9999} showSpinner={false} />
                 <AuthContext>
                     <Toaster />
                     {children}

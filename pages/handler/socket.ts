@@ -1,8 +1,12 @@
-import { SEND_MESSAGE, TYPING_STATUS } from "@/lib/constants";
+import { SEND_MESSAGE, TYPING_STATUS, USER_JOINED, USER_ONLINE, USER_LEFT } from "@/lib/constants";
 import { db } from "@/lib/prisma-db";
 import { pusherServer } from "@/lib/pusher";
 import { MessagePayload, TypingStatusPayload } from "@/lib/types";
 import { Socket } from "socket.io";
+import { UserPayload } from "@/lib/types";
+import { UserManager } from "../api/manager/user-manager";
+
+const userManager = new UserManager();
 
 // For sending messages
 export const handleSendMessage = (socket: Socket) => {
@@ -50,15 +54,13 @@ export const handleSendMessage = (socket: Socket) => {
                                 id: newMessage.id,
                             },
                         },
-                        // unreadCount: {
-                        //     increment: 1,
-                        // },
                     },
                     include: {
                         participants: true,
                         messages: {
                             include: {
                                 seen: true,
+                                sender: true,
                             },
                         },
                     },
@@ -90,5 +92,33 @@ export const handleTypingStatus = (socket: Socket) => {
         } catch (error) {
             console.log("error while sending typing updates: ", error);
         }
+    });
+};
+
+export const handleUser = (socket: Socket) => {
+    socket.on(USER_JOINED, async ({ id, name }: UserPayload, returnListToUser) => {
+        console.log("user joined from server");
+        // Adding the user
+        userManager.addUser({
+            id,
+            name,
+            socket,
+        });
+
+        console.log("A USER joined: ", userManager.getAvailableUsers());
+
+        returnListToUser(userManager.getAvailableUsers);
+
+        // Notifying all users
+        socket.broadcast.emit(USER_ONLINE, userManager.getAvailableUsers());
+    });
+
+    socket.on("disconnect", () => {
+        // Removing the user
+        userManager.removeUser(socket);
+
+        console.log("USER LEFT from server");
+        // // Notifying all users
+        socket.broadcast.emit(USER_ONLINE, userManager.getAvailableUsers());
     });
 };

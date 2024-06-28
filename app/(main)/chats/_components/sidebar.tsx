@@ -3,21 +3,17 @@
 import { User } from "@prisma/client";
 import { SidebarHeader } from "./sidebar-header";
 import { SidebarList } from "./sidebar-list";
-import { FullChatType, FullMessageType } from "@/lib/types";
+import { FullChatType, FullMessageType, UserPayload } from "@/lib/types";
 import { SidebarSearch } from "./sidebar-search";
 import { useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
-import { find } from "lodash";
 
 import { useProfileSidebar } from "@/hooks/use-profile-sidebar";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { ProfileSidebar } from "./profile-sidebar";
-import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useOnlineList } from "@/hooks/use-online-list";
 import { useSocket } from "@/context/socket";
-import { useSocketHandler } from "@/hooks/use-socket-handler";
-import { USER_ONLINE } from "@/lib/constants";
+import { USER_JOINED } from "@/lib/constants";
 
 interface SidebarProps {
     currentUser: User;
@@ -28,22 +24,23 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
     const [initialChats, setInitialChats] = useState<FullChatType[]>(chats);
     const { isOpen, onClose } = useProfileSidebar();
     const { socket } = useSocket();
-    const { registerUser } = useSocketHandler(socket);
 
     useEffect(() => {
-        if (currentUser && socket) {
-            console.log("Registering user");
-
-            registerUser({
-                name: currentUser.name || "",
+        if (socket && currentUser) {
+            const payload: UserPayload = {
                 id: currentUser.id,
-            })
-                .then((data) => {
-                    console.log("User registered: ", data);
-                })
-                .catch((err) => console.log(err));
+                name: currentUser.name || "",
+            };
+
+            socket.emit(USER_JOINED, payload, (err: any) => {
+                if (err) {
+                    console.log("An error occured while emitting USER_JOINED");
+                    console.log({ err });
+                    return;
+                }
+            });
         }
-    }, [currentUser, registerUser, socket]);
+    }, [currentUser, socket]);
 
     useEffect(() => {
         if (!currentUser.email) return;
@@ -112,42 +109,4 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
 };
 
 // TODO: fix this
-
-// Sidebar.Skeleton = function SidebarSkeleton() {
-//     return (
-//         <div className="space-y-4">
-//             <div className="flex items-center w-full ">
-//                 <div className="w-14 h-14 rounded-full"></div>
-//                 <div className="w-full flex flex-col items-start">
-//                     <div className="w-full h-8"></div>
-
-//                     <div className="w-full h-4"></div>
-//                 </div>
-//             </div>
-//             <div className="flex items-center w-full ">
-//                 <div className="w-14 h-14 rounded-full"></div>
-//                 <div className="w-full flex flex-col items-start">
-//                     <div className="w-full h-8"></div>
-
-//                     <div className="w-full h-4"></div>
-//                 </div>
-//             </div>
-//             <div className="flex items-center w-full ">
-//                 <div className="w-14 h-14 rounded-full"></div>
-//                 <div className="w-full flex flex-col items-start">
-//                     <div className="w-full h-8"></div>
-
-//                     <div className="w-full h-4"></div>
-//                 </div>
-//             </div>
-//             <div className="flex items-center w-full ">
-//                 <div className="w-14 h-14 rounded-full"></div>
-//                 <div className="w-full flex flex-col items-start">
-//                     <div className="w-full h-8"></div>
-
-//                     <div className="w-full h-4"></div>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
+// Add Skeleton

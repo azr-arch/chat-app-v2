@@ -96,8 +96,7 @@ export const handleTypingStatus = (socket: Socket) => {
 };
 
 export const handleUser = (socket: Socket) => {
-    socket.on(USER_JOINED, async ({ id, name }: UserPayload, returnListToUser) => {
-        console.log("user joined from server");
+    socket.on(USER_JOINED, async ({ id, name }: UserPayload) => {
         // Adding the user
         userManager.addUser({
             id,
@@ -105,20 +104,16 @@ export const handleUser = (socket: Socket) => {
             socket,
         });
 
-        console.log("A USER joined: ", userManager.getAvailableUsers());
-
-        returnListToUser(userManager.getAvailableUsers);
-
         // Notifying all users
-        socket.broadcast.emit(USER_ONLINE, userManager.getAvailableUsers());
+        await pusherServer.trigger("USER", USER_ONLINE, { data: userManager.getAvailableUsers() });
     });
 
-    socket.on("disconnect", () => {
+    socket.on("disconnect", async () => {
         // Removing the user
         userManager.removeUser(socket);
 
-        console.log("USER LEFT from server");
         // // Notifying all users
-        socket.broadcast.emit(USER_ONLINE, userManager.getAvailableUsers());
+        await pusherServer.trigger("USER", USER_ONLINE, { data: userManager.getAvailableUsers() });
+        console.log("User's left: ", userManager.getAvailableUsers().length);
     });
 };

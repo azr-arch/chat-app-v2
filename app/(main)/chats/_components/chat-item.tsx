@@ -1,9 +1,8 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
-import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { useParams } from "next/navigation";
+import { useMemo } from "react";
 import { FullChatType } from "@/lib/types";
 import { useOtherUser } from "@/hooks/use-other-user";
 import Link from "next/link";
@@ -16,7 +15,6 @@ interface ChatItemProps {
 }
 
 export const ChatItem = ({ chat }: ChatItemProps) => {
-    const router = useRouter();
     const params = useParams();
     const otherUser = useOtherUser(chat);
     const session = useSession();
@@ -60,17 +58,7 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
         return params.chatId === chat.id;
     }, [chat.id, params]);
 
-    // Todo can be used for new chats
-    // Creating new chat route functionality is missing
-    const onClick = useCallback(async () => {
-        try {
-            const data = await axios.get(`/api/chat/${chat.id}`);
-
-            router.push(`/chats/${data.data.id}`);
-        } catch (error) {
-            console.log(error);
-        }
-    }, [chat.id, router]);
+    // Check if its online from onlineList
 
     return (
         <li

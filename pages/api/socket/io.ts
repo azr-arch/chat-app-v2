@@ -30,8 +30,6 @@ export default function SocketHandler(req: NextApiRequest, res: NextApiResponseW
     const io = new Server(res.socket.server);
     res.socket.server.io = io;
 
-    const userManager = new UserManager();
-
     io.on("connection", (socket) => {
         // SEND_MESSAGE
         handleSendMessage(socket);
@@ -39,7 +37,7 @@ export default function SocketHandler(req: NextApiRequest, res: NextApiResponseW
         // TYPING_STATUS
         handleTypingStatus(socket);
 
-        //
+        // Handling user join or left
         handleUser(socket);
     });
 

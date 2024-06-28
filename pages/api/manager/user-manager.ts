@@ -28,10 +28,12 @@ export class UserManager {
     }
 
     removeUser(socket: Socket) {
+        console.log("Removing a user");
         this.users = this.users.filter((user) => user.socket !== socket);
     }
 
     getAvailableUsers() {
-        return this.users.length;
+        const dataToSend = this.users.map((user) => ({ id: user.id, name: user.name }));
+        return dataToSend;
     }
 }

@@ -1,6 +1,11 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { User } from "@prisma/client";
 import Image from "next/image";
+import { OnlineIndicator } from "./online-indicator";
+import { useMemo } from "react";
+import { useOnlineList } from "@/hooks/use-online-list";
 
 interface AvatarProps {
     user?: User;
@@ -8,6 +13,17 @@ interface AvatarProps {
 }
 
 export const Avatar = ({ user, size }: AvatarProps) => {
+    const { onlineList } = useOnlineList();
+
+    const isOnline = useMemo(() => {
+        if (!user) return false;
+
+        // Assuming onlineList is an array of objects with id and name properties
+        const userExists = onlineList.some((user) => user.id === user.id);
+
+        return userExists;
+    }, [onlineList, user]);
+
     return (
         <div className="relative">
             <div
@@ -30,6 +46,8 @@ export const Avatar = ({ user, size }: AvatarProps) => {
                     sizes="40"
                 />
             </div>
+            {/* Online indicator */}
+            {isOnline ? <OnlineIndicator /> : null}
         </div>
     );
 };

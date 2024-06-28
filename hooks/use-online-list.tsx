@@ -1,18 +1,17 @@
 import { USER_ONLINE } from "@/lib/constants";
 import { useEffect, useState } from "react";
-import { Socket } from "socket.io-client";
+import { pusherClient } from "@/lib/pusher";
 
-export const useOnlineList = (socket: Socket | null) => {
-    const [onlineList, setOnlineList] = useState<number>(0);
+export const useOnlineList = () => {
+    const [onlineList, setOnlineList] = useState<{ id: string; name: string }[] | []>([]);
 
     useEffect(() => {
-        if (socket) {
-            socket.on(USER_ONLINE, (data: number) => {
-                console.log("USER online event triggered");
-                setOnlineList(data);
-            });
-        }
-    }, [socket]);
+        pusherClient.subscribe("USER");
+
+        pusherClient.bind(USER_ONLINE, ({ data }: { data: { id: string; name: string }[] }) => {
+            setOnlineList(data);
+        });
+    }, []);
 
     return { onlineList };
 };

@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/prisma-db";
-import { getCurrentUser } from "../get-current-user";
+import { getCurrentUser } from "../db/get-current-user";
 import { SendMessage } from "./schema";
 import { z } from "zod";
 import { pusherServer } from "@/lib/pusher";

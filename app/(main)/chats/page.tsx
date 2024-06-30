@@ -1,5 +1,3 @@
-import { auth } from "@/auth";
-
 const ChatsPage = async () => {
     return (
         <div className="w-full h-full bg-main  flex items-center justify-center">

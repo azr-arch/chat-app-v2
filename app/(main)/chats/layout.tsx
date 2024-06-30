@@ -1,12 +1,12 @@
 import { Sidebar } from "./_components/sidebar";
-import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/actions/get-current-user";
-import { SocketProvider } from "@/context/socket";
-import { SocketIndicator } from "@/components/socket-indicator";
-import { getChats } from "@/actions/get-chat/get-chats";
 import { AddUserModal } from "@/components/modals/add-user.modal";
-import { currentUser } from "@/lib/auth";
-import { getAllFriends } from "@/actions/get-all-friends";
+
+import { getChats } from "@/actions/db/get-chat/get-chats";
+import { getAllFriends } from "@/actions/db/get-all-friends";
+import { getCurrentUser } from "@/actions/db/get-current-user";
+
+import { SocketProvider } from "@/context/socket";
+import { redirect } from "next/navigation";
 
 const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
     const currUser = await getCurrentUser();
@@ -19,11 +19,9 @@ const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
     const friends = await getAllFriends();
 
     return (
-        // I wanna give this Socket provider a value of currentUserInfo which can be used
         <SocketProvider>
             <div className="w-full h-full flex relative">
                 <AddUserModal friends={friends} />
-                {/* <SocketIndicator /> */}
                 <Sidebar currentUser={currUser} chats={availableChats} />
                 {children}
             </div>

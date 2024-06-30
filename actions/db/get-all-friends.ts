@@ -23,6 +23,7 @@ import { getCurrentUser } from "./get-current-user";
 
 //  ------------------------------------------------------
 
+// Return all of the user of app
 export const getAllFriends = async () => {
     const currUser = await getCurrentUser();
 

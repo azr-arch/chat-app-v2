@@ -47,7 +47,7 @@ export const getChats = async () => {
 
         return chat;
     } catch (error: any) {
-        console.log(error, "SERVER_ERROR");
+        console.log(error, "SERVER_ERROR ");
         return [];
     }
 };

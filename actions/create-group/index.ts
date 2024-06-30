@@ -3,7 +3,7 @@
 import { createSafeAction } from "@/lib/create-safe-action";
 import { InputType, ReturnType } from "./types";
 import { db } from "@/lib/prisma-db";
-import { getCurrentUser } from "../get-current-user";
+import { getCurrentUser } from "../db/get-current-user";
 import { revalidatePath } from "next/cache";
 import { CreateGroupSchema } from "@/schemas";
 

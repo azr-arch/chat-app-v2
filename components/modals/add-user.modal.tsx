@@ -10,6 +10,7 @@ interface AddUserModalProps {
     friends?: SelectOptions[];
 }
 
+// Modal to create chat
 export const AddUserModal = ({ friends }: AddUserModalProps) => {
     const [isMounted, setIsMounted] = useState(false);
     const { isOpen, onClose } = useAddFriendModal();

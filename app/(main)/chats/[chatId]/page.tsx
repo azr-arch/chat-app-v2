@@ -1,8 +1,8 @@
 import { ChatHeader } from "./_components/chat-header";
 import { ChatMessages } from "./_components/chat-messages";
 import { MessageForm } from "./_components/message-form";
-import { getChatById } from "@/actions/get-chat/get-chat-by-id";
-import { getCurrentUser } from "@/actions/get-current-user";
+import { getChatById } from "@/actions/db/get-chat/get-chat-by-id";
+import { getCurrentUser } from "@/actions/db/get-current-user";
 
 const ChatIdPage = async ({ params }: { params: { chatId: string } }) => {
     const [currentChat, currentUser] = await Promise.all([

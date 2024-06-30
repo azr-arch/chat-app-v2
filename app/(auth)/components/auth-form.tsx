@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { signIn, useSession } from "next-auth/react";
 
 import { useRouter } from "next/navigation";
-import { getCurrentUser } from "@/actions/get-current-user";
+import { getCurrentUser } from "@/actions/db/get-current-user";
 import { FormSubmit } from "@/components/form/form-submit";
 
 import { z } from "zod";

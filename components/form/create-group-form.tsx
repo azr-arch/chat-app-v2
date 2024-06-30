@@ -1,6 +1,5 @@
 "use client";
 
-import { Select } from "../select";
 import {
     Form,
     FormControl,
@@ -9,18 +8,19 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { CreateGroupSchema } from "@/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSubmit } from "./form-submit";
 import { Input } from "../ui/input";
-import { ElementRef, useRef } from "react";
+import { Select } from "../select";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { createGroupAction } from "@/actions/create-group";
 import { SelectOptions } from "@/lib/types";
 import { useSafeAction } from "@/hooks/use-safe-action";
-import { toast } from "sonner";
 import { useAddFriendModal } from "@/hooks/use-add-friend-modal";
+import { CreateGroupSchema } from "@/schemas";
+import { ElementRef, useRef } from "react";
 
 export const CreateGroupForm = ({ friends }: { friends?: SelectOptions[] }) => {
     const { onClose } = useAddFriendModal();

@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/prisma-db";
-import { getCurrentUser } from "./get-current-user";
+import { getCurrentUser } from "./db/get-current-user";
 import { revalidatePath } from "next/cache";
 
 export const addFriendHandler = async ({ email }: { email: string }) => {

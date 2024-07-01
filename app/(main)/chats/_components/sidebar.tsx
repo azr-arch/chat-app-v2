@@ -3,7 +3,7 @@
 import { User } from "@prisma/client";
 import { SidebarHeader } from "./sidebar-header";
 import { SidebarList } from "./sidebar-list";
-import { FullChatType, FullMessageType, UserPayload } from "@/lib/types";
+import { FullChatType, FullMessageType } from "@/lib/types";
 import { SidebarSearch } from "./sidebar-search";
 import { useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
@@ -11,9 +11,7 @@ import { pusherClient } from "@/lib/pusher";
 import { useProfileSidebar } from "@/hooks/use-profile-sidebar";
 import { ProfileSidebar } from "./profile-sidebar";
 import { X } from "lucide-react";
-import { useOnlineList } from "@/hooks/use-online-list";
-import { useSocket } from "@/context/socket";
-import { USER_JOINED } from "@/lib/constants";
+import { toast } from "sonner";
 
 interface SidebarProps {
     currentUser: User;
@@ -23,28 +21,26 @@ interface SidebarProps {
 export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
     const [initialChats, setInitialChats] = useState<FullChatType[]>(chats);
     const { isOpen, onClose } = useProfileSidebar();
-    const { socket } = useSocket();
+
+    const userJoinedCaller = async () => {
+        try {
+            await fetch("/api/user_joined");
+        } catch (error) {
+            toast.error(" Due to a network issue, your active status won’t be visible.");
+            console.log("Error: ", error);
+        }
+    };
 
     useEffect(() => {
-        if (socket && currentUser) {
-            const payload: UserPayload = {
-                id: currentUser.id,
-                name: currentUser.name || "",
-            };
-
-            socket.emit(USER_JOINED, payload, (err: any) => {
-                if (err) {
-                    console.log("An error occured while emitting USER_JOINED");
-                    console.log({ err });
-                    return;
-                }
-            });
-        }
-    }, [currentUser, socket]);
+        userJoinedCaller()
+            .then((data) => console.log(data))
+            .catch((err) => console.log(err));
+    }, []);
 
     useEffect(() => {
         if (!currentUser.email) return;
         pusherClient.subscribe(currentUser.email);
+        pusherClient.subscribe("userJoinedChannel");
 
         const updateChatHandler = (data: {
             id: string;
@@ -67,7 +63,9 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
             );
         };
 
-        pusherClient.bind("chat:update", updateChatHandler);
+        // pusherClient.bind("chat:update", updateChatHandler);
+        // // what should be the bind name of userjoined
+        // pusherClient.bind("userJoined", )
 
         return () => {
             pusherClient.unbind("chat:update", updateChatHandler);

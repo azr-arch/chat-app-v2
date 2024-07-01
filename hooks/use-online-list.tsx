@@ -1,15 +1,16 @@
 import { USER_ONLINE } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
+import { User } from "@/manager/user-manager";
 
 export const useOnlineList = () => {
-    const [onlineList, setOnlineList] = useState<{ id: string; name: string }[] | []>([]);
+    const [onlineList, setOnlineList] = useState<User[] | []>([]);
 
     useEffect(() => {
-        pusherClient.subscribe("USER");
+        pusherClient.subscribe("userJoinedChannel");
 
-        pusherClient.bind(USER_ONLINE, ({ data }: { data: { id: string; name: string }[] }) => {
-            setOnlineList(data);
+        pusherClient.bind("userJoinedSucces", (data: { activeList: User[] }) => {
+            setOnlineList(data.activeList);
         });
     }, []);
 

@@ -18,6 +18,7 @@ export const Avatar = ({ user, size }: AvatarProps) => {
     const isOnline = useMemo(() => {
         if (!user) return false;
 
+        if (onlineList.length < 1) return;
         // Assuming onlineList is an array of objects with id and name properties
         const userExists = onlineList.some((user) => user.id === user.id);
 

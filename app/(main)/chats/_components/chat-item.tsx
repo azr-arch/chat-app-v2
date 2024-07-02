@@ -70,7 +70,7 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
         >
             <Link href={`/chats/${chat.id}`} className="w-full">
                 <div className="flex items-center gap-6 ">
-                    <Avatar size="md" user={otherUser} />
+                    <Avatar size="md" userInfo={otherUser} />
 
                     <div className="hidden md:flex flex-col items-start justify-center gap-1 ">
                         <p className="text-lightGray ">{otherUser?.name}</p>

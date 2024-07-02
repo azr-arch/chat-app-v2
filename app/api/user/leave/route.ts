@@ -11,19 +11,16 @@ export const GET = async (req: NextRequest) => {
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
-        userDb.addUser({
-            id: currUser.id,
-            username: currUser.name!,
-            image: currUser.image!,
-            email: currUser.email!,
-        });
+        // Removing user from the list of active users
+        userDb.removeUser(currUser.id);
 
-        await pusherServer.trigger("userJoinedChannel", "userJoinedSucces", {
+        await pusherServer.trigger("userJoinAndLeftChannel", "userLeft", {
             activeList: userDb.getActiveUsers(),
         });
 
-        console.log("user added to activeList on server");
+        return NextResponse.json({ success: true, data: userDb.getActiveUsers() });
     } catch (error) {
-        console.log("[API_USER_JOINED]: ", error);
+        console.log("[API_USER_LEAVE]: ", error);
+        return new NextResponse("Internal error", { status: 500 });
     }
 };

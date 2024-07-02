@@ -16,8 +16,9 @@ export class UserManager {
         this.activeUsers.set(user.id, user);
     }
 
-    removeUser(user: User) {
-        this.activeUsers.delete(user.id);
+    removeUser(userId: string) {
+        console.log({ userId }, " to remove from activeUsers");
+        this.activeUsers.delete(userId);
     }
 
     getActiveUsers() {

@@ -5,13 +5,14 @@ import { SidebarHeader } from "./sidebar-header";
 import { SidebarList } from "./sidebar-list";
 import { FullChatType, FullMessageType } from "@/lib/types";
 import { SidebarSearch } from "./sidebar-search";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
 
 import { useProfileSidebar } from "@/hooks/use-profile-sidebar";
 import { ProfileSidebar } from "./profile-sidebar";
 import { X } from "lucide-react";
 import { toast } from "sonner";
+import { useOnlineList } from "@/hooks/use-online-list";
 
 interface SidebarProps {
     currentUser: User;
@@ -22,25 +23,31 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
     const [initialChats, setInitialChats] = useState<FullChatType[]>(chats);
     const { isOpen, onClose } = useProfileSidebar();
 
-    const userJoinedCaller = async () => {
+    // Subscribe to the Pusher channel and set up event handlers
+    const { initialized } = useOnlineList();
+
+    const userJoinedCaller = useCallback(async () => {
         try {
-            await fetch("/api/user_joined");
+            // To add currentUser in list of online users
+            const res = await fetch("/api/user/join", {
+                method: "POST",
+            });
+            console.log("res: ", await res.json());
         } catch (error) {
             toast.error(" Due to a network issue, your active status won’t be visible.");
             console.log("Error: ", error);
         }
-    };
+    }, []);
 
     useEffect(() => {
-        userJoinedCaller()
-            .then((data) => console.log(data))
-            .catch((err) => console.log(err));
-    }, []);
+        if (initialized) {
+            userJoinedCaller();
+        }
+    }, [initialized, userJoinedCaller]);
 
     useEffect(() => {
         if (!currentUser.email) return;
         pusherClient.subscribe(currentUser.email);
-        pusherClient.subscribe("userJoinedChannel");
 
         const updateChatHandler = (data: {
             id: string;
@@ -63,12 +70,15 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
             );
         };
 
-        // pusherClient.bind("chat:update", updateChatHandler);
-        // // what should be the bind name of userjoined
-        // pusherClient.bind("userJoined", )
+        console.log("event bind user::active");
+        pusherClient.bind("chat:update", updateChatHandler);
+        pusherClient.bind("user::active", (data: any) => {
+            console.log("user active event in sidebar: ", data);
+        });
 
         return () => {
             pusherClient.unbind("chat:update", updateChatHandler);
+            pusherClient.unsubscribe(currentUser?.email || "");
         };
     }, [currentUser.email]);
 

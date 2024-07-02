@@ -8,22 +8,23 @@ import { useMemo } from "react";
 import { useOnlineList } from "@/hooks/use-online-list";
 
 interface AvatarProps {
-    user?: User;
+    userInfo?: User;
     size: "xs" | "sm" | "md" | "lg";
 }
 
-export const Avatar = ({ user, size }: AvatarProps) => {
+export const Avatar = ({ userInfo, size }: AvatarProps) => {
     const { onlineList } = useOnlineList();
 
     const isOnline = useMemo(() => {
-        if (!user) return false;
+        if (!userInfo) return false;
 
         if (onlineList.length < 1) return;
-        // Assuming onlineList is an array of objects with id and name properties
-        const userExists = onlineList.some((user) => user.id === user.id);
+
+        // Assuming onlineList is an array of objects
+        const userExists = onlineList.some((activeUser) => activeUser.id === userInfo.id);
 
         return userExists;
-    }, [onlineList, user]);
+    }, [onlineList, userInfo]);
 
     return (
         <div className="relative">
@@ -40,7 +41,7 @@ export const Avatar = ({ user, size }: AvatarProps) => {
                 )}
             >
                 <Image
-                    src={user?.image || "/placeholder.png"}
+                    src={userInfo?.image || "/placeholder.png"}
                     fill
                     alt="user-profile"
                     className="object-cover"

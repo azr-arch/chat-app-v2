@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { User } from "@prisma/client";
-import { LogOut, MoveLeft } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 
@@ -11,6 +11,17 @@ interface ProfileSidebarProps {
 }
 
 export const ProfileSidebar = ({ data }: ProfileSidebarProps) => {
+    const logoutHandler = async () => {
+        try {
+            // To remove user from list of active users.
+            await fetch("/api/user/leave");
+
+            signOut({ redirect: true });
+        } catch (error) {
+            console.error("An error occured while removing from list of active users: ", error);
+        }
+    };
+
     return (
         <aside className="w-full h-full bg-light-black flex items-center justify-start pt-10 space-y-6  flex-col">
             <div className="">
@@ -36,7 +47,7 @@ export const ProfileSidebar = ({ data }: ProfileSidebarProps) => {
             <Button
                 variant={"outline"}
                 className="flex items-center gap-x-1"
-                onClick={() => signOut({ redirect: true })}
+                onClick={logoutHandler}
             >
                 <LogOut className="w-4 h-4" />
                 Logout

@@ -6,7 +6,6 @@ import type { Socket as NetSocket } from "net";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Server as IOServer } from "socket.io";
 import { Server } from "socket.io";
-import { UserManager } from "../manager/user-manager";
 
 interface SocketServer extends HTTPServer {
     io?: IOServer | undefined;

@@ -1,4 +1,4 @@
-import { UserManager } from "@/manager/user-manager";
+import { UserManager } from "@/pages/api/manager/user-manager";
 
 declare global {
     var userManager: UserManager | undefined;

@@ -1,37 +1,22 @@
 import { USER_ONLINE } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
-import { User } from "@/manager/user-manager";
-import { useSession } from "next-auth/react";
+import { Socket } from "socket.io-client";
+import { UserPayload } from "@/lib/types";
 
-export const useOnlineList = () => {
-    const [onlineList, setOnlineList] = useState<User[] | []>([]);
-    const [initialized, setInitialized] = useState(false);
-    const { data } = useSession();
+export const useOnlineList = (socket: Socket | null) => {
+    const [onlineList, setOnlineList] = useState<UserPayload[] | []>([]);
 
     useEffect(() => {
-        if (!data?.user) return;
+        pusherClient.subscribe("USER");
 
-        setInitialized(true);
+        pusherClient.bind(USER_ONLINE, ({ data }: { data: { id: string; name: string }[] }) => {
+            console.log("getting userOnline event on client: ", data);
+            setOnlineList(data);
+        });
+    }, []);
 
-        const userHandler = (data: { activeUsers: User[] }) => {
-            setOnlineList(data.activeUsers);
-        };
-
-        pusherClient.subscribe(data.user.email!);
-
-        // pusherClient.bind("user::active", (data: { activeUsers: User[] }) => {
-        //     console.log("got userActive event");
-        //     userHandler(data);
-        // });
-
-        return () => {
-            pusherClient.unsubscribe(data.user?.email!);
-
-            pusherClient.unbind("user::active", userHandler);
-            setInitialized(false);
-        };
-    }, [data?.user]);
+    console.log({ onlineList });
 
     // useEffect(() => {
     //     pusherClient.subscribe("userJoinAndLeftChannel");
@@ -58,5 +43,5 @@ export const useOnlineList = () => {
     //     };
     // }, []);
 
-    return { onlineList, initialized };
+    return { onlineList };
 };

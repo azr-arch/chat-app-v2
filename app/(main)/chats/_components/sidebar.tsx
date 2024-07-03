@@ -13,6 +13,10 @@ import { ProfileSidebar } from "./profile-sidebar";
 import { X } from "lucide-react";
 import { toast } from "sonner";
 import { useOnlineList } from "@/hooks/use-online-list";
+import { useSocket } from "@/context/socket";
+import { useSocketHandler } from "@/hooks/use-socket-handler";
+import { USER_JOINED } from "@/lib/constants";
+import { UserPayload } from "@/lib/types";
 
 interface SidebarProps {
     currentUser: User;
@@ -22,60 +26,46 @@ interface SidebarProps {
 export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
     const [initialChats, setInitialChats] = useState<FullChatType[]>(chats);
     const { isOpen, onClose } = useProfileSidebar();
-
-    // Subscribe to the Pusher channel and set up event handlers
-    const { initialized } = useOnlineList();
-
-    const userJoinedCaller = useCallback(async () => {
-        try {
-            // To add currentUser in list of online users
-            const res = await fetch("/api/user/join", {
-                method: "POST",
-            });
-            console.log("res: ", await res.json());
-        } catch (error) {
-            toast.error(" Due to a network issue, your active status won’t be visible.");
-            console.log("Error: ", error);
-        }
-    }, []);
+    const { socket } = useSocket();
 
     useEffect(() => {
-        if (initialized) {
-            userJoinedCaller();
+        if (currentUser && socket) {
+            const payload: UserPayload = {
+                name: currentUser.name!,
+                id: currentUser.id,
+            };
+
+            console.log("Emittting user joined: ", payload.name);
+            socket.emit(USER_JOINED, payload, (err: any) => {
+                if (err) {
+                    console.log("An error occured while emitting USER_JOINED");
+                    console.log({ err });
+                    return;
+                }
+            });
         }
-    }, [initialized, userJoinedCaller]);
+    }, [currentUser, socket]);
 
     useEffect(() => {
         if (!currentUser.email) return;
         pusherClient.subscribe(currentUser.email);
 
-        const updateChatHandler = (data: {
-            id: string;
-            message: FullMessageType;
-            // chatUnreadCount: number;
-        }) => {
+        const updateChatHandler = (data: { id: string; message: FullMessageType }) => {
             if (!data.message) return;
             setInitialChats((prev) =>
                 prev.map((prevChat) => {
                     if (prevChat.id === data.id) {
-                        // if (!find(prevChat.messages, { id: data.message.id })) {
                         return {
                             ...prevChat,
                             messages: [...prevChat.messages, data.message],
                         };
-                        // }
                     }
                     return prevChat;
                 })
             );
         };
 
-        console.log("event bind user::active");
         pusherClient.bind("chat:update", updateChatHandler);
-        pusherClient.bind("user::active", (data: any) => {
-            console.log("user active event in sidebar: ", data);
-        });
-
         return () => {
             pusherClient.unbind("chat:update", updateChatHandler);
             pusherClient.unsubscribe(currentUser?.email || "");

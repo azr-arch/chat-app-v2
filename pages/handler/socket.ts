@@ -4,9 +4,7 @@ import { pusherServer } from "@/lib/pusher";
 import { MessagePayload, TypingStatusPayload } from "@/lib/types";
 import { Socket } from "socket.io";
 import { UserPayload } from "@/lib/types";
-import { UserManager } from "../api/manager/user-manager";
-
-const userManager = new UserManager();
+import { userDb } from "@/lib/user-manager-db";
 
 // For sending messages
 export const handleSendMessage = (socket: Socket) => {
@@ -96,24 +94,24 @@ export const handleTypingStatus = (socket: Socket) => {
 };
 
 export const handleUser = (socket: Socket) => {
-    socket.on(USER_JOINED, async ({ id, name }: UserPayload) => {
+    socket.on(USER_JOINED, async ({ id, name }: UserPayload, callback) => {
         // Adding the user
-        userManager.addUser({
+        userDb.addUser({
             id,
             name,
             socket,
         });
 
         // Notifying all users
-        await pusherServer.trigger("USER", USER_ONLINE, { data: userManager.getAvailableUsers() });
+        await pusherServer.trigger("USER", USER_ONLINE, { data: userDb.getAvailableUsers() });
     });
 
     socket.on("disconnect", async () => {
         // Removing the user
-        userManager.removeUser(socket);
+        userDb.removeUser(socket);
 
         // // Notifying all users
-        await pusherServer.trigger("USER", USER_ONLINE, { data: userManager.getAvailableUsers() });
-        console.log("User's left: ", userManager.getAvailableUsers().length);
+        await pusherServer.trigger("USER", USER_ONLINE, { data: userDb.getAvailableUsers() });
+        console.log("User's left: ", userDb.getAvailableUsers().length);
     });
 };

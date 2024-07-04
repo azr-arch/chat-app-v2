@@ -1,5 +1,5 @@
 import { Sidebar } from "./_components/sidebar";
-import { AddUserModal } from "@/components/modals/add-user.modal";
+import { AddChatModal } from "@/components/modals/add-chat-modal";
 
 import { getChats } from "@/actions/db/get-chat/get-chats";
 import { getAllFriends } from "@/actions/db/get-all-friends";
@@ -21,7 +21,7 @@ const ChatsLayout = async ({ children }: { children: React.ReactNode }) => {
     return (
         <SocketProvider>
             <div className="w-full h-full flex relative">
-                <AddUserModal friends={friends} />
+                <AddChatModal friends={friends} />
                 <Sidebar currentUser={currUser} chats={availableChats} />
                 {children}
             </div>

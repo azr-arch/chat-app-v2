@@ -7,6 +7,7 @@ export type ActionState<TInput extends FieldValues, TOutput> = {
     data?: TOutput;
 };
 
+// TODO: need rework
 export const createSafeAction = <TInput extends FieldValues, TOutput>(
     schema: z.Schema<TInput>,
     handler: (validateData: TInput) => Promise<ActionState<TInput, TOutput>>

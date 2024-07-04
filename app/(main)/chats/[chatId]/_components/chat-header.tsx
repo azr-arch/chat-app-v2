@@ -17,6 +17,7 @@ export const ChatHeader = ({ data }: ChatHeaderProps) => {
 
                 <div className="flex flex-col items-start ">
                     <p className="text-lightGray font-medium ">{receiver.name}</p>
+                    {/* TODO: implement this */}
                     {/* <p className="text-xs text-neutral-700">active 3min ago.</p> */}
                 </div>
             </div>

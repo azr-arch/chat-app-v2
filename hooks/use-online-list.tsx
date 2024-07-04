@@ -4,7 +4,7 @@ import { pusherClient } from "@/lib/pusher";
 import { Socket } from "socket.io-client";
 import { UserPayload } from "@/lib/types";
 
-export const useOnlineList = (socket: Socket | null) => {
+export const useOnlineList = () => {
     const [onlineList, setOnlineList] = useState<UserPayload[] | []>([]);
 
     useEffect(() => {

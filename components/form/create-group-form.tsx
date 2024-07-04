@@ -18,12 +18,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createGroupAction } from "@/actions/create-group";
 import { SelectOptions } from "@/lib/types";
 import { useSafeAction } from "@/hooks/use-safe-action";
-import { useAddFriendModal } from "@/hooks/use-add-friend-modal";
+import { useAddChatModal } from "@/hooks/use-add-chat-modal";
 import { CreateGroupSchema } from "@/schemas";
 import { ElementRef, useRef } from "react";
 
 export const CreateGroupForm = ({ friends }: { friends?: SelectOptions[] }) => {
-    const { onClose } = useAddFriendModal();
+    const { onClose } = useAddChatModal();
 
     const { execute, isLoading } = useSafeAction(createGroupAction, {
         onError: (data) => {

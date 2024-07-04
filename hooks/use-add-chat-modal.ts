@@ -2,13 +2,13 @@ import { create } from "zustand";
 
 type Type = "group" | "private";
 
-type AddFriendModalProps = {
+type AddChatModalProps = {
     isOpen: boolean;
     onClose: () => void;
     onOpen: () => void;
 };
 
-export const useAddFriendModal = create<AddFriendModalProps>((set) => ({
+export const useAddChatModal = create<AddChatModalProps>((set) => ({
     isOpen: false,
     onOpen: () => set({ isOpen: true }),
     onClose: () => set({ isOpen: false }),

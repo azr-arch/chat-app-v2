@@ -6,7 +6,7 @@ import { Paperclip } from "lucide-react";
 import axios from "axios";
 
 export const Upload = ({ chatId }: { chatId: string }) => {
-    const onUpload = async (results: CldUploadWidgetResults) => {
+    const onUpload = async (results: any) => {
         if (!results || !results?.info?.url) return;
 
         try {

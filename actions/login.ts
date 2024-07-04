@@ -34,14 +34,6 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
                         },
                     };
 
-                case "InvalidLoginError":
-                    return {
-                        message: error.message,
-                        errors: {
-                            invalid_user: "invalid email",
-                        },
-                    };
-
                 default:
                     return {
                         message: "incorrect email or password",

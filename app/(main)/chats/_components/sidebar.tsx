@@ -5,16 +5,13 @@ import { SidebarHeader } from "./sidebar-header";
 import { SidebarList } from "./sidebar-list";
 import { FullChatType, FullMessageType } from "@/lib/types";
 import { SidebarSearch } from "./sidebar-search";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
 
 import { useProfileSidebar } from "@/hooks/use-profile-sidebar";
 import { ProfileSidebar } from "./profile-sidebar";
 import { X } from "lucide-react";
-import { toast } from "sonner";
-import { useOnlineList } from "@/hooks/use-online-list";
 import { useSocket } from "@/context/socket";
-import { useSocketHandler } from "@/hooks/use-socket-handler";
 import { USER_JOINED } from "@/lib/constants";
 import { UserPayload } from "@/lib/types";
 
@@ -35,7 +32,6 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
                 id: currentUser.id,
             };
 
-            console.log("Emittting user joined: ", payload.name);
             socket.emit(USER_JOINED, payload, (err: any) => {
                 if (err) {
                     console.log("An error occured while emitting USER_JOINED");
@@ -76,15 +72,9 @@ export const Sidebar = ({ currentUser, chats }: SidebarProps) => {
         <aside className="max-w-[480px] border-r  border-[#1e1f21] md:min-w-[350px] md:w-full w-[80px] h-full bg-main relative">
             <SidebarHeader data={currentUser} />
             <SidebarSearch />
-            {/* <div className="block md:hidden absolute top-2 right-2">
-                <SidebarOpen className="w-5 h-5" />
-            </div> */}
 
             {/* <DesktopSidebar /> */}
             <SidebarList chats={initialChats} />
-
-            {/* <p className="my-2 text-lg font-medium">Chats</p> */}
-            {/* <ChatList data={chats} /> */}
 
             {/* Profile Nav */}
             <div

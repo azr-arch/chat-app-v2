@@ -1,15 +1,15 @@
 "use client";
 
-import { FullChatType, FullMessageType, TypingStatusPayload } from "@/lib/types";
 import { useEffect, useRef, useState } from "react";
-import { useOtherUser } from "@/hooks/use-other-user";
+import { FullChatType, FullMessageType, TypingStatusPayload } from "@/lib/types";
 import { pusherClient } from "@/lib/pusher";
 
+import { GroupMessage } from "@/components/group-message";
+import { TypingIndicator } from "@/components/typing-indicator";
+import { useOtherUser } from "@/hooks/use-other-user";
+import { useDebounce } from "@/hooks/use-debounce";
 import { find } from "lodash";
 import axios from "axios";
-import { GroupMessage } from "@/components/group-message";
-import { useDebounce } from "@/hooks/use-debounce";
-import { TypingIndicator } from "@/components/typing-indicator";
 
 interface ChatMessagesProps {
     chatData: FullChatType;

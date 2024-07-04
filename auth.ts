@@ -14,10 +14,6 @@ export const {
     session: { strategy: "jwt" },
     ...authConfig,
     callbacks: {
-        authorize({ auth }) {
-            const isAuthenticated = auth?.user;
-            console.log("auth.ts: ", isAuthenticated);
-        },
         // async session({ session, token, user }) {
         //     console.log({ session, token, user });
         //     if (session?.user) {
@@ -26,7 +22,6 @@ export const {
         //                 email: session.user.email,
         //             },
         //         });
-
         //         if (userExists) {
         //             return session;
         //         }

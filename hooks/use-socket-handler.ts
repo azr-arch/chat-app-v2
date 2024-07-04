@@ -32,6 +32,7 @@ export const useSocketHandler = (socket: Socket | null) => {
         socket.emit(TYPING_STATUS, payload);
     };
 
+    // Might delete this
     const registerUser = (payload: UserPayload) => {
         return new Promise((resolve, reject) => {
             if (!socket?.connected) {

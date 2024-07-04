@@ -1,19 +1,19 @@
 "use client";
 
-import { useAddFriendModal } from "@/hooks/use-add-friend-modal";
 import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import { X } from "lucide-react";
 import { CreateGroupForm } from "../form/create-group-form";
+import { Button } from "../ui/button";
 import { SelectOptions } from "@/lib/types";
-interface AddUserModalProps {
+import { useAddChatModal } from "@/hooks/use-add-chat-modal";
+import { X } from "lucide-react";
+interface AddChatModalProps {
     friends?: SelectOptions[];
 }
 
-// Modal to create chat
-export const AddUserModal = ({ friends }: AddUserModalProps) => {
+// Modal to create a chat
+export const AddChatModal = ({ friends }: AddChatModalProps) => {
     const [isMounted, setIsMounted] = useState(false);
-    const { isOpen, onClose } = useAddFriendModal();
+    const { isOpen, onClose } = useAddChatModal();
 
     useEffect(() => {
         setIsMounted(true);

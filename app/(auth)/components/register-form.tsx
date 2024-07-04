@@ -51,13 +51,24 @@ export const RegisterForm = () => {
 
         // Append each value from 'values' to formData
         Object.keys(values).forEach((key) => {
-            formData.append(key, values[key]);
+            // Error on this line
+            // formData.append(key, values[key] as string | Blob);
+            // const value = values[key as keyof typeof values];
+            const value = values[key as keyof typeof values];
+
+            if (value instanceof FileList) {
+                // Assuming you want to append the first file from the FileList
+                const file = value[0];
+                formData.append(key, file);
+            } else {
+                formData.append(key, value as string);
+            }
         });
 
         // Append 'profilePicture' file to formData
-        if (values.profilePicture[0]) {
-            formData.set("profilePicture", values.profilePicture[0]);
-        }
+        // if (values.profilePicture[0]) {
+        //     formData.set("profilePicture", values.profilePicture[0]);
+        // }
 
         startTransition(() => {
             // Pass formData to your register function instead of values

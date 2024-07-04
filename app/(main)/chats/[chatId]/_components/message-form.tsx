@@ -1,19 +1,16 @@
 "use client";
 
+import { FormEvent, useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Upload } from "@/components/upload";
 import { useSocket } from "@/context/socket";
 import { useSocketHandler } from "@/hooks/use-socket-handler";
 import { TYPING_TIMER_LENGTH } from "@/lib/constants";
-import { pusherClient } from "@/lib/pusher";
 import axios from "axios";
-import { setISODay } from "date-fns/setISODay";
 import { Send } from "lucide-react";
-import { useParams } from "next/navigation";
-import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type FormData = {
     message: string;
@@ -73,6 +70,7 @@ export const MessageForm = ({ chatId, senderId }: { chatId: string; senderId: st
                     await onSubmit({ message: messageRef.current.value });
                 } catch (error) {
                     console.log("Error sending message: ", error);
+                    toast.error("Network issue!, please try again later");
                 }
             } finally {
                 setIsLoading(false);

@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useAddFriendModal } from "@/hooks/use-add-friend-modal";
+import { useAddChatModal } from "@/hooks/use-add-chat-modal";
 import { useProfileSidebar } from "@/hooks/use-profile-sidebar";
 import { User } from "@prisma/client";
-import { MessageSquarePlus, Plus, Users } from "lucide-react";
+import { Plus } from "lucide-react";
 import Image from "next/image";
 
 interface SidebarHeaderProps {
@@ -12,8 +12,8 @@ interface SidebarHeaderProps {
 }
 
 export const SidebarHeader = ({ data }: SidebarHeaderProps) => {
-    const { onOpen, isOpen } = useProfileSidebar();
-    const { onOpen: openAddFriend } = useAddFriendModal();
+    const { onOpen } = useProfileSidebar();
+    const { onOpen: openAddChatModal } = useAddChatModal();
 
     return (
         <div className="w-full bg-transparent px-6 h-16 flex items-center">
@@ -35,7 +35,7 @@ export const SidebarHeader = ({ data }: SidebarHeaderProps) => {
 
             <div className="ml-auto space-x-2">
                 <Button
-                    onClick={() => openAddFriend()}
+                    onClick={() => openAddChatModal()}
                     title="Add Friend"
                     className="  bg-light-black "
                     size={"icon"}

@@ -58,8 +58,6 @@ export const ChatItem = ({ chat }: ChatItemProps) => {
         return params.chatId === chat.id;
     }, [chat.id, params]);
 
-    // Check if its online from onlineList
-
     return (
         <li
             key={otherUser?.id}

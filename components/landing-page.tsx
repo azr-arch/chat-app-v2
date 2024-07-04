@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
 
+// TODO: implement this
 export const LandingPage = () => {
     return (
         <div className="bg-white w-full h-full">

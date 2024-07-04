@@ -39,7 +39,7 @@ export const register = async (values: FormData) => {
     const buffer = new Uint8Array(arrayBuffer);
 
     try {
-        const fileRes = await new Promise((resolve, reject) =>
+        const fileRes: any = await new Promise((resolve, reject) =>
             cloudinary.uploader
                 .upload_stream({}, (error, result) => {
                     if (error) {

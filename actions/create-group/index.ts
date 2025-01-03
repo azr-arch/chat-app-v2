@@ -64,7 +64,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     }
 
-    revalidatePath("/");
+    revalidatePath("/chats");
 
     return {
         data: chat,

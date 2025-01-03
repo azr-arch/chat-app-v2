@@ -19,6 +19,7 @@ export const LoginSchema = z.object({
         .min(1, { message: "Password is required" }),
 });
 
+// TODO remove profile photo check
 export const RegisterSchema = z.object({
     name: z.string().min(1, { message: "Username cannot be empty" }),
     email: z

@@ -41,9 +41,7 @@ export const LoginForm = () => {
         login(values)
             .then((data) => {
                 if (data?.errors) {
-                    startTransition(() => {
-                        setError(data?.error);
-                    });
+                    setError(data?.error);
                     return;
                 }
                 form.reset();
@@ -73,7 +71,7 @@ export const LoginForm = () => {
                                 <FormLabel>Email</FormLabel>
                                 <FormControl>
                                     <Input
-                                        disabled={isPending}
+                                        disabled={form.formState.isSubmitting}
                                         {...field}
                                         placeholder="for@example.com"
                                         type="email"
@@ -93,7 +91,7 @@ export const LoginForm = () => {
                                 <FormLabel>Password</FormLabel>
                                 <FormControl>
                                     <Input
-                                        disabled={isPending}
+                                        disabled={form.formState.isSubmitting}
                                         {...field}
                                         placeholder="******"
                                         type="password"

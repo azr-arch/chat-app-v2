@@ -32,7 +32,7 @@ export const Select = ({ value, onChange, options }: SelectProps) => {
         <div
             className="w-full relative border-[0.1em] border-neutral-400 rounded-sm min-h-[2.5em] flex items-center p-2"
             tabIndex={0}
-            onClick={() => setIsOptionsEnabled((prev) => !prev)}
+            // onClick={() => setIsOptionsEnabled((prev) => !prev)}
         >
             <span className="grow flex items-center gap-2">
                 {value && value.length > 0 ? (

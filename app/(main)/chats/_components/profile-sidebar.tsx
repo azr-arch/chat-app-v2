@@ -24,6 +24,7 @@ export const ProfileSidebar = ({ data }: ProfileSidebarProps) => {
                         src={data?.image || "/placeholder.png"}
                         fill
                         alt={`${data.name}'s avatar`}
+                        className="object-cover object-center"
                     />
                 </div>
 

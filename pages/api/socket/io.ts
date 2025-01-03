@@ -1,5 +1,3 @@
-// /api/socket/io.ts
-
 import { handleSendMessage, handleTypingStatus, handleUser } from "@/lib/socket";
 import type { Server as HTTPServer } from "http";
 import type { Socket as NetSocket } from "net";

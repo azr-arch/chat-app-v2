@@ -20,16 +20,6 @@ Welcome to the Chat Application project! This enhanced version builds upon previ
    - Create chat groups and invite friends.
    - Collaborate with ease.
 
-## Work in Progress
-
-1. **WebRTC for Video Calling**:
-   - Exciting! Implement WebRTC for video calls.
-   - Enhance communication with face-to-face interactions.
-
-2. **End-to-End Message Encryption**:
-   - Prioritize security by adding end-to-end encryption.
-   - Keep your users' messages private.
-
 ## Tech Stack
 
 - **Next.js**: A powerful React framework for server-rendered applications.
